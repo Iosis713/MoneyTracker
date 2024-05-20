@@ -3,7 +3,8 @@ project(MoneyTracker)
 
 set(CXX_STANDARD REQUIRED 20)
 set(FLAGS   -Wall -Wpedantic -Wextra -Werror)
-set(SRC     Source/Transaction.cpp)
+set(SRC     Source/Transaction.cpp
+            Source/Manager.cpp)
 
 find_package(GTest REQUIRED)
 

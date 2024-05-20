@@ -6,7 +6,7 @@
 #include <iostream>
 #include <stdexcept>
 
-using Date = std::array<unsigned int, 3>;
+using Date = std::array<uint16_t, 3>;
 
 class Transaction
 {
@@ -23,10 +23,9 @@ public:
     std::string getDescription() const;    
     float getValue() const;
 
-    void setDate(const unsigned int day, const unsigned int month, const unsigned int year);
+    void setDate(const uint16_t day, const uint16_t month, const uint16_t year);
     void setDescription(const std::string& description);
     void setValue(const float value);    
 };
-
 #endif
 

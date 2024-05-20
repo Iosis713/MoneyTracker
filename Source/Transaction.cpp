@@ -21,7 +21,7 @@ float Transaction::getValue() const
     return this->value_;
 }
 
-void Transaction::setDate(const unsigned int day, const unsigned int month, const unsigned int year)
+void Transaction::setDate(const uint16_t day, const uint16_t month, const uint16_t year)
 {
     //day validation
     if((month == 1 or month == 3 or month == 5 or month == 7 or

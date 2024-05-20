@@ -1,12 +1,12 @@
 #include <array>
 #include <iostream>
 #include <gtest/gtest.h>
-//#include <gtest/gmock.h>
 #include <stdexcept>
 
 #include "Source/Headers/Transaction.hpp"
+#include "Source/Headers/Manager.hpp"
 
-using Date = std::array<unsigned int, 3>;
+using Date = std::array<uint16_t, 3>;
 
 class TransactionFixture_dateValidation : public testing::TestWithParam<Date>
 {
@@ -22,6 +22,13 @@ TEST_P(TransactionFixture_dateValidation, PositiveCatch)
     ASSERT_THROW(transaction.setDate(date[0], date[1], date[2]), std::runtime_error);
 }
 
+TEST(ManagerOuterOfRange, positiveExceptionCatch)
+{
+    Manager manager;
+
+    ASSERT_THROW(manager.selectByTransactionNumber(2), std::runtime_error);
+}
+
 INSTANTIATE_TEST_CASE_P(DateValue, TransactionFixture_dateValidation, testing::Values(
     Date{32, 10, 2024},
     Date{31, 11, 2024},
@@ -34,3 +41,4 @@ int main(int argc, char** argv)
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
+
