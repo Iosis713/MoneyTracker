@@ -1,4 +1,5 @@
 #include <array>
+#include <cstring>
 #include <iostream>
 #include <gtest/gtest.h>
 #include <stdexcept>
@@ -15,6 +16,29 @@ public:
 protected:
 };
 
+class ManagerFixture_descriptionSel : public testing::TestWithParam<std::string>
+{
+protected:
+
+public:
+    Manager manager;
+    
+    void setUp()
+    {
+        manager.addTransaction({1, 1, 2024}, -50.f, "Pizza");
+        manager.addTransaction({10, 2, 2024}, -75.5f, "Fuel");
+        manager.addTransaction({30, 3, 2024}, 3540.f, "salary");
+    }
+};
+
+TEST_P(ManagerFixture_descriptionSel, positiveSel)
+{     
+    setUp();
+    std::string param = GetParam();
+    std::string result = manager.selectByTransactionDescription(param)->getDescription();
+    ASSERT_STRCASEEQ(result.c_str(), param.c_str());
+}
+
 TEST_P(TransactionFixture_dateValidation, PositiveCatch)
 {
     Date date = GetParam();
@@ -29,12 +53,26 @@ TEST(ManagerOuterOfRange, positiveExceptionCatch)
     ASSERT_THROW(manager.selectByTransactionNumber(2), std::runtime_error);
 }
 
+TEST_F(ManagerFixture_descriptionSel, NoDescriptionFound)
+{
+    setUp();
+    
+    std::string input = "Cheesburger";
+
+    ASSERT_THROW(manager.selectByTransactionDescription(input), std::runtime_error);
+}
+
 INSTANTIATE_TEST_CASE_P(DateValue, TransactionFixture_dateValidation, testing::Values(
     Date{32, 10, 2024},
     Date{31, 11, 2024},
     Date{31, 4, 2023},
     Date{29, 2, 2023},
     Date{10, 13, 2022}));
+
+INSTANTIATE_TEST_CASE_P(Descriptions, ManagerFixture_descriptionSel, testing::Values(
+    std::string{"Pizza"},
+    std::string{"Salary"},
+    std::string{"fuel"}));
 
 int main(int argc, char** argv)
 {

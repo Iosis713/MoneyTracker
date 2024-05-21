@@ -2,6 +2,8 @@
 #ifndef MANAGER
 #define MANAGER
 
+#include <algorithm>
+#include <cctype>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -22,8 +24,8 @@ public:
     void addTransaction(const std::array<uint16_t, 3>& date, const float value, const std::string& description);
     void addTransaction(const Transaction& transaction);
     
-    std::shared_ptr<Transaction>& selectByTransactionNumber(uint16_t number);
-
+    std::shared_ptr<Transaction>& selectByTransactionDescription(std::string& description);
+    std::shared_ptr<Transaction>& selectByTransactionNumber(const uint16_t number);
 };
 #endif
 
