@@ -15,6 +15,51 @@ void Manager::addTransaction(const Transaction& transaction)
     manager_.push_back(std::make_shared<Transaction>(transaction));
 }
 
+void Manager::readFromFile(const std::string& filename)
+{
+    std::fstream file;
+    file.open(filename, file.in);
+    if(file.is_open())
+    {
+        std::string data;
+        while(file.eof())
+        {   
+            getline(file, data, ';');
+            uint16_t day = static_cast<uint16_t>(stoi(data));
+            getline(file, data, ';');
+            uint16_t month = static_cast<uint16_t>(stoi(data));
+            getline(file, data, ';');
+            uint16_t year = static_cast<uint16_t>(stoi(data));
+            getline(file, data, ';');
+            float value = stof(data);
+            getline(file, data, '\n');
+            std::string description = data;
+
+            addTransaction({day, month, year}, value, description);
+        }
+    }
+    else
+    {
+        throw std::runtime_error("Unable to open file");
+    }
+}
+
+void Manager::saveToFile(const std::string& filename) const
+{
+    std::ofstream file(filename, file.out | file.app);
+    if(file.is_open())
+    {
+        for(auto& transaction : manager_)
+        {
+            file << transaction->getDate()[0] << ";"
+                 << transaction->getDate()[1] << ";"
+                 << transaction->getDate()[2] << ";"
+                 << transaction->getValue() << ";"
+                 << transaction->getDescription() << "\n";
+        }
+    }
+}
+
 std::shared_ptr<Transaction>& Manager::selectByTransactionDescription(std::string& description)
 {   
     //letter case insensitivity
