@@ -19,10 +19,12 @@ public:
     Transaction(Date date, float value, std::string description);
     ~Transaction() = default;
 
+    void printTransaction() const;
+
     Date getDate() const;
     std::string getDescription() const;    
     float getValue() const;
-
+    
     void setDate(const uint16_t day, const uint16_t month, const uint16_t year);
     void setDescription(const std::string& description);
     void setValue(const float value);    

@@ -1,0 +1,5 @@
+/home/barloz/Programming/MoneyTracker/build/CMakeFiles/MoneyTracker-lib.dir
+/home/barloz/Programming/MoneyTracker/build/CMakeFiles/MoneyTracker.dir
+/home/barloz/Programming/MoneyTracker/build/CMakeFiles/TestRunner.dir
+/home/barloz/Programming/MoneyTracker/build/CMakeFiles/edit_cache.dir
+/home/barloz/Programming/MoneyTracker/build/CMakeFiles/rebuild_cache.dir

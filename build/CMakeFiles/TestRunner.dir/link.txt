@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/TestRunner.dir/testRunner.cpp.o -o TestRunner  /usr/lib/libgtest.a libMoneyTracker-lib.a -lpthread 

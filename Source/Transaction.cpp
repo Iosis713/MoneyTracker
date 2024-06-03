@@ -6,6 +6,12 @@ Transaction::Transaction(Date date, float value, std::string description)
     , description_(description)
 {}
 
+void Transaction::printTransaction() const
+{
+    std::cout << date_[0] << "." << date_[1] << "." << date_[2] << " Value: "
+              << value_ << " (" << description_ << ")\n";
+}
+
 Date Transaction::getDate() const
 {
     return this->date_;

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libMoneyTracker-lib.a CMakeFiles/MoneyTracker-lib.dir/Source/Transaction.cpp.o CMakeFiles/MoneyTracker-lib.dir/Source/Manager.cpp.o
+/usr/bin/ranlib libMoneyTracker-lib.a

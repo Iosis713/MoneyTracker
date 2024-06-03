@@ -15,6 +15,14 @@ void Manager::addTransaction(const Transaction& transaction)
     manager_.push_back(std::make_shared<Transaction>(transaction));
 }
 
+void Manager::printAll() const
+{
+    for(auto& transaction : manager_)
+    {
+        transaction->printTransaction();
+    }
+}
+
 void Manager::readFromFile(const std::string& filename)
 {
     std::fstream file;

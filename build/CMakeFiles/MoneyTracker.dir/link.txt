@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/MoneyTracker.dir/main.cpp.o -o MoneyTracker  libMoneyTracker-lib.a 

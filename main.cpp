@@ -16,8 +16,11 @@ int main()
     
     auto selected = manager.selectByValue(250.6);
     std::cout << "Selected: " << selected->getValue() << " " << selected->getDescription() <<'\n';
+    
+    std::cout << "Print all!\n";
+    manager.printAll();
 
-    std::cout <<"TEST RUN!\n";
+    std::cout << "TEST RUN!\n";
     return 0;
 }
 
