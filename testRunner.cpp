@@ -31,11 +31,26 @@ public:
     }
 };
 
+class ManagerFixture_ValueSelection : public testing::TestWithParam<float>
+{
+protected:
+
+public:
+    Manager manager;
+    
+    void setUp()
+    {
+        manager.addTransaction({1, 1, 2024}, -50.f, "Pizza");
+        manager.addTransaction({10, 2, 2024}, -75.5f, "Fuel");
+        manager.addTransaction({30, 3, 2024}, 3540.f, "salary");
+    }
+};
+
 TEST_P(ManagerFixture_descriptionSel, positiveSel)
 {     
     setUp();
     std::string param = GetParam();
-    std::string result = manager.selectByTransactionDescription(param)->getDescription();
+    std::string result = manager.selectByDescription(param)->getDescription();
     ASSERT_STRCASEEQ(result.c_str(), param.c_str());
 }
 
@@ -46,11 +61,19 @@ TEST_P(TransactionFixture_dateValidation, PositiveCatch)
     ASSERT_THROW(transaction.setDate(date[0], date[1], date[2]), std::runtime_error);
 }
 
+TEST_P(ManagerFixture_ValueSelection, positiveSel)
+{
+    setUp();
+    float param = GetParam();
+    
+    ASSERT_EQ(param, manager.selectByValue(param)->getValue());
+}
+
 TEST(ManagerOuterOfRange, positiveExceptionCatch)
 {
     Manager manager;
 
-    ASSERT_THROW(manager.selectByTransactionNumber(2), std::runtime_error);
+    ASSERT_THROW(manager.selectByNumber(2), std::runtime_error);
 }
 
 TEST_F(ManagerFixture_descriptionSel, NoDescriptionFound)
@@ -59,7 +82,7 @@ TEST_F(ManagerFixture_descriptionSel, NoDescriptionFound)
     
     std::string input = "Cheesburger";
 
-    ASSERT_THROW(manager.selectByTransactionDescription(input), std::runtime_error);
+    ASSERT_THROW(manager.selectByDescription(input), std::runtime_error);
 }
 
 INSTANTIATE_TEST_CASE_P(DateValue, TransactionFixture_dateValidation, testing::Values(
@@ -73,6 +96,12 @@ INSTANTIATE_TEST_CASE_P(Descriptions, ManagerFixture_descriptionSel, testing::Va
     std::string{"Pizza"},
     std::string{"Salary"},
     std::string{"fuel"}));
+
+INSTANTIATE_TEST_CASE_P(Values, ManagerFixture_ValueSelection, testing::Values(
+    -50.0,
+    -75.500,
+    3540.000));
+
 
 int main(int argc, char** argv)
 {

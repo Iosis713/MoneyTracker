@@ -13,6 +13,9 @@ int main()
     manager.addTransaction(transaction);
     manager.saveToFile("testFile");
     manager.readFromFile("testFile");
+    
+    auto selected = manager.selectByValue(250.6);
+    std::cout << "Selected: " << selected->getValue() << " " << selected->getDescription() <<'\n';
 
     std::cout <<"TEST RUN!\n";
     return 0;

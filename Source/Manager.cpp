@@ -46,7 +46,7 @@ void Manager::readFromFile(const std::string& filename)
 
 void Manager::saveToFile(const std::string& filename) const
 {
-    std::ofstream file(filename, file.out | file.app);
+    std::ofstream file(filename, file.out | file.trunc);
     if(file.is_open())
     {
         for(auto& transaction : manager_)
@@ -60,7 +60,7 @@ void Manager::saveToFile(const std::string& filename) const
     }
 }
 
-std::shared_ptr<Transaction>& Manager::selectByTransactionDescription(std::string& description)
+std::shared_ptr<Transaction>& Manager::selectByDescription(std::string& description)
 {   
     //letter case insensitivity
     std::transform(description.begin(), description.end(), description.begin(),
@@ -83,7 +83,7 @@ std::shared_ptr<Transaction>& Manager::selectByTransactionDescription(std::strin
     return *iter;    
 }
 
-std::shared_ptr<Transaction>& Manager::selectByTransactionNumber(uint16_t number)
+std::shared_ptr<Transaction>& Manager::selectByNumber(uint16_t number)
 {
     if(number > manager_.size())
     {
@@ -94,4 +94,22 @@ std::shared_ptr<Transaction>& Manager::selectByTransactionNumber(uint16_t number
         return manager_[number];
     }    
 }
+
+std::shared_ptr<Transaction>& Manager::selectByValue(const float value)
+{
+    auto iter = std::find_if(manager_.begin(), manager_.end(), [value](auto tran)
+            {
+                auto val = tran->getValue();
+                return val == value;
+            });
+    return *iter;
+}
+
+TransactionManager Manager::getManager() const
+{
+    return this->manager_;
+}
+
+
+
 
