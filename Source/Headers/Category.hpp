@@ -6,7 +6,7 @@
 #include <string>
 #include <utility>
 
-using CategoryPair = std::pair<unsigned int, std::string>;
+using CategoryPair = std::pair<unsigned, std::string>;
 using VectorOfCategories = std::vector<CategoryPair>;
 
 struct Category
