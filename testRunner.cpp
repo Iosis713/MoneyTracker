@@ -26,7 +26,7 @@ TEST_F(CategoryFixture, CategoryAdding)
     ASSERT_EQ("SomeNewCategory", lastIter->second);
 }
 
-TEST_F(CategoryFixture, SearchByCategoryID)
+TEST_F(CategoryFixture, SearchForCategory)
 {
     //WHEN
     const auto& result = category.SearchForCategory(3);
@@ -34,6 +34,48 @@ TEST_F(CategoryFixture, SearchByCategoryID)
     //THEN
     ASSERT_EQ(3, result->first);
     ASSERT_EQ("Rent", result->second);    
+}
+
+TEST_F(CategoryFixture, RemovedCategoryByIDRvalue)
+{
+    //WHEN
+    category.RemoveCategoryFoundByValue(3);
+    
+    //THEN
+    const auto& result = category.categories_.end() - 1;
+    ASSERT_EQ("Fuel", result->second);
+}
+
+TEST_F(CategoryFixture, RemovedCategoryByIDLvalue)
+{
+    //WHEN
+    const int integer = 3;
+    category.RemoveCategoryFoundByValue(integer);
+    
+    //THEN
+    const auto& result = category.categories_.end() - 1;
+    ASSERT_EQ("Fuel", result->second);
+}
+
+TEST_F(CategoryFixture, RemoveCategoryByNameRvalue)
+{
+    //WHEN
+    category.RemoveCategoryFoundByValue("Food");
+
+    //THEN
+    ASSERT_EQ("Fuel", category.categories_.begin()->second);
+    ASSERT_EQ(2, category.categories_.begin()->first);
+}
+
+TEST_F(CategoryFixture, RemoveCategoryByNameLvalue)
+{
+    //WHEN
+    const std::string str = "Food";
+    category.RemoveCategoryFoundByValue(str);
+
+    //THEN
+    ASSERT_EQ("Fuel", category.categories_.begin()->second);
+    ASSERT_EQ(2, category.categories_.begin()->first);
 }
 
 

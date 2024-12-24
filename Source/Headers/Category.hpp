@@ -2,9 +2,11 @@
 #ifndef CATEGORY
 #define CATEGORY
 
+#include <algorithm>
 #include <stdexcept>
 #include <vector>
 #include <string>
+#include <iostream>
 #include <utility>
 #include <type_traits>
 
@@ -16,8 +18,10 @@ struct Category
     VectorOfCategories categories_;
     
     void AddCategory(CategoryPair&& categoryPair);
-    ~Category() = default;
-    
+
+    ~Category() = default;  
+    /*_______________________________________TEMPLATES__________________________________________*/
+
     template<typename SearchByType>
     CategoriesIterator SearchForCategory(const SearchByType& searchValue)
     {        
@@ -38,8 +42,20 @@ struct Category
             return result;
         }
     }
-};
 
+    template<typename FoundByType>
+    void RemoveCategoryFoundByValue(FoundByType&& foundByValue)
+    {   
+        categories_.erase(std::remove_if(categories_.begin(), categories_.end(), [foundByValue](const auto& element)
+            {
+                if constexpr (std::is_same_v<int, std::remove_cvref_t<FoundByType>>)
+                    return foundByValue == element.first;
+                else
+                    return foundByValue == element.second;
+            }), categories_.end());
+
+    }
+};
 
 #endif
 
