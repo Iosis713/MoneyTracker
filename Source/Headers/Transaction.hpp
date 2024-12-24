@@ -11,9 +11,9 @@ struct Transaction
     [[maybe_unused]]float value_ = 0.f;
     [[maybe_unused]]std::string description_ = "Unknown";
     [[maybe_unused]]long date_ = 0; //Need to be chagned to separate struct with enums and validators
-    [[maybe_unused]]unsigned categoryID_ = 0; //Need to be changed to separate struct
+    [[maybe_unused]]int categoryID_ = 0; //Need to be changed to separate struct
 
-    Transaction(unsigned transactionID, float value, std::string description, long date, unsigned categoryID);
+    Transaction(unsigned transactionID, float value, std::string description, long date, int categoryID);
     ~Transaction() = default;
 
 };
