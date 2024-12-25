@@ -23,24 +23,16 @@ struct Category
     /*_______________________________________TEMPLATES__________________________________________*/
 
     template<typename SearchByType>
-    CategoriesIterator SearchForCategory(const SearchByType& searchValue)
+    CategoriesIterator SearchForCategory(SearchByType&& searchValue)
     {        
-        if constexpr(std::is_same_v<std::string, SearchByType>)
-        {
-            auto result = std::ranges::find_if(categories_, [searchValue](const auto& element)
+            auto result = std::ranges::find_if(categories_, [&searchValue](const auto& element)
                     {
-                        return searchValue == element.second;
+                        if constexpr (std::is_same_v<int, SearchByType>)
+                            return searchValue == element.first;
+                        else if constexpr (std::is_same_v<std::string, SearchByType>)
+                            return searchValue == element.second;
                     });
             return result;
-        }
-        else 
-        {
-            auto result = std::ranges::find_if(categories_, [searchValue](const auto& element)
-                    {
-                        return static_cast<int>(searchValue) == element.first;
-                    });
-            return result;
-        }
     }
 
     template<typename FoundByType>
@@ -53,7 +45,6 @@ struct Category
                 else if constexpr(std::is_same_v<std::string, std::remove_cvref_t<FoundByType>>)
                     return foundByValue == element.second;
             }), categories_.end());
-
     }
 };
 

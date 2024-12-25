@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "Source/Category.cpp"
 #include "Source/Transaction.cpp"
 #include "gtest/gtest.h"
@@ -26,7 +27,7 @@ TEST_F(CategoryFixture, CategoryAdding)
     ASSERT_EQ("SomeNewCategory", lastIter->second);
 }
 
-TEST_F(CategoryFixture, SearchForCategory)
+TEST_F(CategoryFixture, SearchForCategoryByID)
 {
     //WHEN
     const auto& result = category.SearchForCategory(3);
@@ -35,6 +36,17 @@ TEST_F(CategoryFixture, SearchForCategory)
     ASSERT_EQ(3, result->first);
     ASSERT_EQ("Rent", result->second);    
 }
+
+TEST_F(CategoryFixture, SearchForCategoryByString)
+{
+    //WHEN
+    const auto& result = category.SearchForCategory(std::forward<std::string>("Rent"));
+
+    //THEN
+    ASSERT_EQ(3, result->first);
+    ASSERT_EQ("Rent", result->second);    
+}
+
 
 TEST_F(CategoryFixture, RemovedCategoryByIDRvalue)
 {
