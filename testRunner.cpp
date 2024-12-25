@@ -60,7 +60,7 @@ TEST_F(CategoryFixture, RemovedCategoryByIDLvalue)
 TEST_F(CategoryFixture, RemoveCategoryByNameRvalue)
 {
     //WHEN
-    category.RemoveCategoryFoundByValue("Food");
+    category.RemoveCategoryFoundByValue(std::forward<std::string>("Food"));
 
     //THEN
     ASSERT_EQ("Fuel", category.categories_.begin()->second);

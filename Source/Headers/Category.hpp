@@ -46,11 +46,11 @@ struct Category
     template<typename FoundByType>
     void RemoveCategoryFoundByValue(FoundByType&& foundByValue)
     {   
-        categories_.erase(std::remove_if(categories_.begin(), categories_.end(), [foundByValue](const auto& element)
+        categories_.erase(std::remove_if(categories_.begin(), categories_.end(), [&foundByValue](const auto& element)
             {
                 if constexpr (std::is_same_v<int, std::remove_cvref_t<FoundByType>>)
                     return foundByValue == element.first;
-                else
+                else if constexpr(std::is_same_v<std::string, std::remove_cvref_t<FoundByType>>)
                     return foundByValue == element.second;
             }), categories_.end());
 
