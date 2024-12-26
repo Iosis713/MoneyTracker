@@ -16,6 +16,8 @@ struct CategoryFixture : public testing::Test
     }
 };
 
+/*_____________________________CATEGORY TESTS___________________________________*/
+
 TEST_F(CategoryFixture, CategoryAdding)
 {
     //GIVEN
@@ -90,6 +92,41 @@ TEST_F(CategoryFixture, RemoveCategoryByNameLvalue)
     ASSERT_EQ(2, category.categories_.begin()->first);
 }
 
+TEST_F(CategoryFixture, CategoryIDValidation)
+{
+    //WHEN
+    bool resultTrue = category.ValidateCategoryID(3);
+    bool resultFalse = category.ValidateCategoryID(1000000);
+        
+    //THEN
+    ASSERT_TRUE(resultTrue);
+    ASSERT_FALSE(resultFalse);
+}
+
+/*__________________________TRANSACTION TESTS_________________________*/
+
+class TransactionFixture : public testing::Test
+{
+public:
+    Transaction transaction{1,
+                            100.f,
+                            "SomeDescription",
+                            std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(1)},
+                            4};
+};
+
+TEST_F(TransactionFixture, UpdateDateTest)
+{
+    //GIVEN
+    using namespace std::chrono;
+    const auto expectedDate = year_month_day{2024y, January, 1d};
+
+    //WHEN
+    transaction.UpdateDate({2024y, January, 1d});
+
+    //THEN
+    ASSERT_EQ(expectedDate, transaction.GetDate());
+}
 
 int main(int argc, char** argv)
 {

@@ -18,8 +18,10 @@ struct Category
     VectorOfCategories categories_;
     
     void AddCategory(CategoryPair&& categoryPair);
+    bool ValidateCategoryID(const int categoryID);
 
     ~Category() = default;  
+    
     /*_______________________________________TEMPLATES__________________________________________*/
 
     template<typename SearchByType>

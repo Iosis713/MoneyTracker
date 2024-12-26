@@ -2,19 +2,36 @@
 #ifndef TRANSACTION
 #define TRANSACTION
 
+#include <chrono>
 #include <iostream>
 #include <string>
 
-struct Transaction
-{
-    [[maybe_unused]]unsigned transactionID_ = 0; //need to be changed to generate unique IDs
-    [[maybe_unused]]float value_ = 0.f;
-    [[maybe_unused]]std::string description_ = "Unknown";
-    [[maybe_unused]]long date_ = 0; //Need to be chagned to separate struct with enums and validators
-    [[maybe_unused]]int categoryID_ = 0; //Need to be changed to separate struct
+using Date = std::chrono::year_month_day;
 
-    Transaction(unsigned transactionID, float value, std::string description, long date, int categoryID);
+class Transaction
+{
+private:
+    [[maybe_unused]]const int transactionID_ = 0; //need to be changed to generate unique IDs
+    float value_ = 0.f;
+    std::string description_ = "Unknown";
+    Date date_ = std::chrono::year_month_day(std::chrono::year{2000}, std::chrono::January, std::chrono::day{1});
+    int categoryID_ = 0;
+
+public:
+    Transaction(int transactionID, float value, std::string description, Date date, int categoryID);
     ~Transaction() = default;
+    
+    void UpdateCategoryID(const int categoryID);
+    void UpdateDate(const Date& date);
+    void UpdateDescription(const std::string& description);
+    void UpdateValue(const float value);
+
+    int GetTransactionID() const;
+    float GetValue() const;
+    std::string GetDescription() const;
+    Date GetDate() const;
+    int GetCategoryID() const;
+
 
 };
 
