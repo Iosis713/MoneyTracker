@@ -108,8 +108,7 @@ TEST_F(CategoryFixture, CategoryIDValidation)
 class TransactionFixture : public testing::Test
 {
 public:
-    Transaction transaction{1,
-                            100.f,
+    Transaction transaction{100.f,
                             "SomeDescription",
                             std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(1)},
                             4};
@@ -126,6 +125,18 @@ TEST_F(TransactionFixture, UpdateDateTest)
 
     //THEN
     ASSERT_EQ(expectedDate, transaction.GetDate());
+}
+
+TEST_F(TransactionFixture, TransactionIDTest)
+{
+    //GIVEN
+    Transaction otherTransaction{200.f,
+                            "SomeOtherDescription",
+                            std::chrono::year_month_day{std::chrono::year(1900), std::chrono::June, std::chrono::day(13)},
+                            5};
+
+    //THEN
+    ASSERT_NE(transaction.GetTransactionID(), otherTransaction.GetTransactionID());
 }
 
 int main(int argc, char** argv)

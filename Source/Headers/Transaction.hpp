@@ -8,19 +8,24 @@
 
 using Date = std::chrono::year_month_day;
 
+struct IDGenerator
+{
+    inline static int id = 0;
+};
+
 class Transaction
 {
 private:
-    [[maybe_unused]]const int transactionID_ = 0; //need to be changed to generate unique IDs
+    const int transactionID_ = 0; //need to be changed to generate unique IDs
     float value_ = 0.f;
     std::string description_ = "Unknown";
     Date date_ = std::chrono::year_month_day(std::chrono::year{2000}, std::chrono::January, std::chrono::day{1});
     int categoryID_ = 0;
 
 public:
-    Transaction(int transactionID, float value, std::string description, Date date, int categoryID);
+    Transaction(float value, std::string description, Date date, int categoryID);
     ~Transaction() = default;
-    
+
     void UpdateCategoryID(const int categoryID);
     void UpdateDate(const Date& date);
     void UpdateDescription(const std::string& description);
