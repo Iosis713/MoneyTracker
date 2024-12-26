@@ -6,7 +6,8 @@ set(CXX_STANDARD 20)
 set(FLAGS -Wall -Werror -Wpedantic -Wextra)
 
 set(SRC     ../Source/Category.cpp
-            ../Source/Transaction.cpp)
+            ../Source/Transaction.cpp
+            ../Source/TransactionsManager.cpp)
 
 find_package(GTest REQUIRED)
 

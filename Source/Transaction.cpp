@@ -1,6 +1,6 @@
 #include "Headers/Transaction.hpp"
 
-Transaction::Transaction( float value, std::string description, Date date, int categoryID)
+Transaction::Transaction(float value, std::string description, Date date, int categoryID)
     : transactionID_(IDGenerator::id++)
     , value_(value)
     , description_(description)
