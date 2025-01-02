@@ -5,6 +5,7 @@
 #include "Transaction.hpp"
 #include "Category.hpp"
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -25,5 +26,7 @@ public:
     Transactions& GetTransactions() {return this-> transactions_;}
 
     void AddTransaction(const float value, const std::string& description, const Date date, int categoryID);
+    void SortTransactionByCategoryName();
+
 };
 #endif

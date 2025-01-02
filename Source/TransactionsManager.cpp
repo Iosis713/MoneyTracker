@@ -7,3 +7,15 @@ void TransactionsManager::AddTransaction(const float value, const std::string& d
     else
         throw std::runtime_error("Invalid category. Please check availbe categories or add new one!");
 }
+
+void TransactionsManager::SortTransactionByCategoryName()
+{
+    std::sort(transactions_.begin(), transactions_.end(),//categories 
+        [&](const auto& first, const auto& second)
+            {
+                const auto firstCategoryName = categories.SearchForCategory(first->GetCategoryID());
+                const auto secondCategoryName = categories.SearchForCategory(second->GetCategoryID());
+
+                return firstCategoryName->second  < secondCategoryName->second;
+            });
+}

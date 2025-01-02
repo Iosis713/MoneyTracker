@@ -2,6 +2,7 @@
 #include <string>
 #include "Source/Category.cpp"
 #include "Source/Transaction.cpp"
+#include "Source/TransactionsManager.cpp"
 #include "gtest/gtest.h"
 
 struct CategoryFixture : public testing::Test
@@ -139,8 +140,57 @@ TEST_F(TransactionFixture, TransactionIDTest)
     ASSERT_NE(transaction.GetTransactionID(), otherTransaction.GetTransactionID());
 }
 
+/*____________________________TRANSACTION MANAGER_______________________________*/
+
+class TransactionsManagerFixture : public testing::Test
+{
+public:
+    TransactionsManager transactionsManager;
+
+    void SetUp() override;
+};
+
+TEST_F(TransactionsManagerFixture, TransactionsManagerSortingByCategoryName)
+{
+    //WHEN
+    transactionsManager.SortTransactionByCategoryName();
+    const auto firstCategoryName = transactionsManager.categories.SearchForCategory(transactionsManager.GetTransactions().at(0)->GetCategoryID())->second;
+
+    //THEN
+    ASSERT_EQ("Entertainment", firstCategoryName);
+}
+
+
 int main(int argc, char** argv)
 {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
+
+void TransactionsManagerFixture::SetUp()
+{
+    transactionsManager.categories.AddCategory({1, "Food"});
+    transactionsManager.categories.AddCategory({2, "Fuel"});
+    transactionsManager.categories.AddCategory({3, "Rent"});
+    transactionsManager.categories.AddCategory({4, "Entertainment"});
+
+    transactionsManager.AddTransaction(200.f,
+                                       "FuelFull",
+                                       std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(3)},
+                                       2);
+
+    transactionsManager.AddTransaction(100.f,
+                                       "SomeEntertainment",
+                                       std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(1)},
+                                       4);
+
+    transactionsManager.AddTransaction(35.f,
+                                       "Cheese burger",
+                                       std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(2)},
+                                       1);
+
+    transactionsManager.AddTransaction(1500.f,
+                                       "Flat",
+                                       std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(3)},
+                                       3);
+};
