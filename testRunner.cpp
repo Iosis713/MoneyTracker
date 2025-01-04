@@ -179,6 +179,33 @@ TEST_F(TransactionsManagerFixture, TransactionsManagerFindByDate)
     ASSERT_EQ(transactionsManager.GetTransactions().at(2)->GetTransactionID(), result.at(0)->GetTransactionID());
 }
 
+TEST_F(TransactionsManagerFixture, RemovingByTransactions)
+{
+    //GIVEN
+    Transactions toRemove{};
+    toRemove.push_back(std::make_shared<Transaction>(200.f,
+                                       "FuelFull",
+                                       std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(3)},
+                                       2));
+    
+    //WHEN
+    transactionsManager.RemoveTransactinons(toRemove);
+
+    //THEN
+    ASSERT_EQ(3, transactionsManager.GetTransactions().size());
+}
+
+TEST_F(TransactionsManagerFixture, EmptyTransactionsToRemove)
+{
+    //GIVEN
+    Transactions toRemove{};
+    
+    //WHEN
+    transactionsManager.RemoveTransactinons(toRemove);
+
+    //THEN
+    ASSERT_EQ(4, transactionsManager.GetTransactions().size());
+}
 
 int main(int argc, char** argv)
 {

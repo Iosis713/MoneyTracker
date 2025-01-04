@@ -27,9 +27,11 @@ public:
     Transactions& GetTransactions() {return this-> transactions_;}
 
     void AddTransaction(const float value, const std::string& description, const Date date, int categoryID);
+    Transactions FindTransactionsByDate(const Date date) const;
+    void RemoveTransactinons(const Transactions& transactionsToRemove);
+    
     void SortTransactionsByCategoryName();
     void SortTransactionsByCategoryID();
-
-    Transactions FindTransactionsByDate(const Date date) const;
+    
 };
 #endif

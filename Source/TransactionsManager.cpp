@@ -8,6 +8,39 @@ void TransactionsManager::AddTransaction(const float value, const std::string& d
         throw std::runtime_error("Invalid category. Please check availbe categories or add new one!");
 }
 
+Transactions TransactionsManager::FindTransactionsByDate(const Date date) const
+{
+    Transactions transactions{};
+    std::ranges::for_each(transactions_, [&](const auto& transaction)
+        {
+            if (date == transaction->GetDate())
+                transactions.push_back(transaction);
+        });
+
+    return transactions;
+}
+
+void TransactionsManager::RemoveTransactinons(const Transactions& transactionsToRemove)
+{
+    auto iterToRemove = std::remove_if(transactions_.begin(), transactions_.end(),
+        [&](const auto& element)
+        {
+            bool result = std::ranges::any_of(transactionsToRemove, 
+                [&element](const auto& transToRemove)
+                {   
+                    bool result = true;
+                    result &= element->GetValue() == transToRemove->GetValue();
+                    result &= element->GetDate() == transToRemove->GetDate();
+                    result &= element->GetDescription() == transToRemove->GetDescription();
+                    result &= element->GetCategoryID() == transToRemove->GetCategoryID();
+                    return result;
+                });
+            return result;
+        });
+
+    transactions_.erase(iterToRemove, transactions_.end());
+}
+
 void TransactionsManager::SortTransactionsByCategoryName()
 {
     std::sort(transactions_.begin(), transactions_.end(),//categories 
@@ -30,15 +63,4 @@ void TransactionsManager::SortTransactionsByCategoryID()
 
                 return firstCategoryID->first  < secondCategoryID->first;
             });
-}
-Transactions TransactionsManager::FindTransactionsByDate(const Date date) const
-{
-    Transactions transactions{};
-    std::ranges::for_each(transactions_, [&](const auto& transaction)
-        {
-            if (date == transaction->GetDate())
-                transactions.push_back(transaction);
-        });
-
-    return transactions;
 }
