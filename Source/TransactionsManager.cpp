@@ -8,7 +8,7 @@ void TransactionsManager::AddTransaction(const float value, const std::string& d
         throw std::runtime_error("Invalid category. Please check availbe categories or add new one!");
 }
 
-void TransactionsManager::SortTransactionByCategoryName()
+void TransactionsManager::SortTransactionsByCategoryName()
 {
     std::sort(transactions_.begin(), transactions_.end(),//categories 
         [&](const auto& first, const auto& second)
@@ -18,4 +18,27 @@ void TransactionsManager::SortTransactionByCategoryName()
 
                 return firstCategoryName->second  < secondCategoryName->second;
             });
+}
+
+void TransactionsManager::SortTransactionsByCategoryID()
+{
+    std::ranges::sort(transactions_,
+            [&](const auto& first, const auto& second)
+            {
+                const auto firstCategoryID = categories.SearchForCategory(first->GetCategoryID());
+                const auto secondCategoryID = categories.SearchForCategory(second->GetCategoryID());
+
+                return firstCategoryID->first  < secondCategoryID->first;
+            });
+}
+Transactions TransactionsManager::FindTransactionsByDate(const Date date) const
+{
+    Transactions transactions{};
+    std::ranges::for_each(transactions_, [&](const auto& transaction)
+        {
+            if (date == transaction->GetDate())
+                transactions.push_back(transaction);
+        });
+
+    return transactions;
 }

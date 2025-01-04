@@ -153,11 +153,30 @@ public:
 TEST_F(TransactionsManagerFixture, TransactionsManagerSortingByCategoryName)
 {
     //WHEN
-    transactionsManager.SortTransactionByCategoryName();
+    transactionsManager.SortTransactionsByCategoryName();
     const auto firstCategoryName = transactionsManager.categories.SearchForCategory(transactionsManager.GetTransactions().at(0)->GetCategoryID())->second;
 
     //THEN
     ASSERT_EQ("Entertainment", firstCategoryName);
+}
+
+TEST_F(TransactionsManagerFixture, TransactionsManagerSortingByCategoryID)
+{
+    //WHEN
+    transactionsManager.SortTransactionsByCategoryID();
+    const auto firstCategoryID = transactionsManager.categories.SearchForCategory(transactionsManager.GetTransactions().at(0)->GetCategoryID())->first;
+
+    //THEN
+    ASSERT_EQ(1, firstCategoryID);
+}
+
+TEST_F(TransactionsManagerFixture, TransactionsManagerFindByDate)
+{
+    //GIVEN
+    std::chrono::year_month_day dateToFind{std::chrono::year(2020), std::chrono::May, std::chrono::day(2)};
+    const auto result = transactionsManager.FindTransactionsByDate(dateToFind);
+
+    ASSERT_EQ(transactionsManager.GetTransactions().at(2)->GetTransactionID(), result.at(0)->GetTransactionID());
 }
 
 
@@ -191,6 +210,6 @@ void TransactionsManagerFixture::SetUp()
 
     transactionsManager.AddTransaction(1500.f,
                                        "Flat",
-                                       std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(3)},
+                                       std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(4)},
                                        3);
 };

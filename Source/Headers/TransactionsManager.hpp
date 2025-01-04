@@ -7,8 +7,9 @@
 
 #include <algorithm>
 #include <memory>
-#include <vector>
+#include <ranges>
 #include <stdexcept>
+#include <vector>
 
 using Transactions = std::vector<std::shared_ptr<Transaction>>;
 
@@ -26,7 +27,9 @@ public:
     Transactions& GetTransactions() {return this-> transactions_;}
 
     void AddTransaction(const float value, const std::string& description, const Date date, int categoryID);
-    void SortTransactionByCategoryName();
+    void SortTransactionsByCategoryName();
+    void SortTransactionsByCategoryID();
 
+    Transactions FindTransactionsByDate(const Date date) const;
 };
 #endif
