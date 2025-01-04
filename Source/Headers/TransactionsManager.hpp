@@ -29,7 +29,8 @@ public:
     void AddTransaction(const float value, const std::string& description, const Date date, int categoryID);
     Transactions FindTransactionsByDate(const Date date) const;
     void RemoveTransactinons(const Transactions& transactionsToRemove);
-    
+    void RemoveTransactinons(const std::vector<int> transactionsIDToRemove);
+
     void SortTransactionsByCategoryName();
     void SortTransactionsByCategoryID();
     

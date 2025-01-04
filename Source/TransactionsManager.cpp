@@ -41,6 +41,22 @@ void TransactionsManager::RemoveTransactinons(const Transactions& transactionsTo
     transactions_.erase(iterToRemove, transactions_.end());
 }
 
+void TransactionsManager::RemoveTransactinons(const std::vector<int> transactionsIDToRemove)
+{
+    auto iterToRemove = std::remove_if(transactions_.begin(), transactions_.end(),
+        [&](const auto& element)
+        {
+            bool result = std::ranges::any_of(transactionsIDToRemove, 
+                [&element](const auto& transToRemove)
+                {   
+                    return element->GetTransactionID() == transToRemove;
+                });
+            return result;
+        });
+
+    transactions_.erase(iterToRemove, transactions_.end());
+}
+
 void TransactionsManager::SortTransactionsByCategoryName()
 {
     std::sort(transactions_.begin(), transactions_.end(),//categories 

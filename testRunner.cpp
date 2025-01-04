@@ -207,6 +207,20 @@ TEST_F(TransactionsManagerFixture, EmptyTransactionsToRemove)
     ASSERT_EQ(4, transactionsManager.GetTransactions().size());
 }
 
+TEST_F(TransactionsManagerFixture, RemovingTransactionsToRemoveByID)
+{
+    //GIVEN
+    std::vector<int> toRemove;
+    toRemove.push_back(transactionsManager.GetTransactions().at(0)->GetTransactionID());
+    toRemove.push_back(transactionsManager.GetTransactions().at(1)->GetTransactionID());
+    
+    //WHEN
+    transactionsManager.RemoveTransactinons(toRemove);
+
+    //THEN
+    ASSERT_EQ(2, transactionsManager.GetTransactions().size());
+}
+
 int main(int argc, char** argv)
 {
     testing::InitGoogleTest(&argc, argv);
