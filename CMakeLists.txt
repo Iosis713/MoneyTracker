@@ -7,8 +7,12 @@ set(FLAGS -Wall -Werror -Wpedantic -Wextra)
 
 set(SRC     ../Source/Category.cpp
             ../Source/Transaction.cpp
-            ../Source/TransactionsManager.cpp)
+            ../Source/TransactionsManager.cpp
+            ../Source/Printer.cpp
+            ../Source/Menu.cpp)
 
+set(GMOCK_LIBRARIES /usr/lib/libgmock.a  /usr/lib/libgmock_main.a)
+            
 find_package(GTest REQUIRED)
 
 add_library(${PROJECT_NAME}-lib     ${SRC})
@@ -16,8 +20,10 @@ add_executable(${PROJECT_NAME} main.cpp)
 add_executable(${PROJECT_NAME}-gt   testRunner.cpp)
 
 target_link_libraries(${PROJECT_NAME}       PRIVATE     ${PROJECT_NAME}-lib)
-target_link_libraries(${PROJECT_NAME}-gt    PRIVATE     ${GTEST_LIBRARIES}
-                                                        ${PROJECT_NAME}-lib)
+target_link_libraries(${PROJECT_NAME}-gt    PRIVATE     ${PROJECT_NAME}-lib
+                                                        ${GTEST_LIBRARIES}
+                                                        ${GMOCK_LIBRARIES}
+                                                        pthread)
 
 target_compile_options(${PROJECT_NAME}-lib  PRIVATE ${FLAGS})
 target_compile_options(${PROJECT_NAME}      PRIVATE ${FLAGS})

@@ -18,7 +18,7 @@ struct Category
     VectorOfCategories categories_;
     
     void AddCategory(CategoryPair&& categoryPair);
-    bool ValidateCategoryID(const int categoryID);
+    bool ValidateCategoryID(const int categoryID) const;
 
     ~Category() = default;  
     
@@ -51,4 +51,3 @@ struct Category
 };
 
 #endif
-

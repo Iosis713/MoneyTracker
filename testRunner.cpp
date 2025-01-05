@@ -1,9 +1,13 @@
 #include <iostream>
 #include <string>
+#include <tuple>
+
 #include "Source/Category.cpp"
 #include "Source/Transaction.cpp"
 #include "Source/TransactionsManager.cpp"
+#include "Source/Printer.cpp"
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 
 struct CategoryFixture : public testing::Test
 {
@@ -221,9 +225,42 @@ TEST_F(TransactionsManagerFixture, RemovingTransactionsToRemoveByID)
     ASSERT_EQ(2, transactionsManager.GetTransactions().size());
 }
 
+/*____________________________PRINTER MOCKS____________________________*/
+
+struct PrinterFixture : public testing::TestWithParam<std::tuple<int, std::string, bool>>
+{
+    Printer printer;
+};
+
+TEST_P(PrinterFixture, PrintingSingleTransaction)
+{
+    //GIVEN
+    const auto [catID, catDesc, expectedResult] = GetParam();
+    Category categories;
+    categories.AddCategory({catID, catDesc});
+    const auto transactionToPrint = std::make_shared<Transaction>(200.f,
+                                       "FuelFull",
+                                       std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(3)},
+                                       2);
+
+    //WHEN
+    
+    bool result = printer.Print(transactionToPrint, categories);
+
+    //THEN
+    ASSERT_EQ(expectedResult, result);
+}
+
+INSTANTIATE_TEST_SUITE_P(SinglePrintingInstantion, PrinterFixture, testing::Values(
+    std::make_tuple<int, std::string, bool>(2, "Fuel", true),
+    std::make_tuple<int, std::string, bool>(3, "Rent", false)));
+
+/*_______________________MAIN_____________________________________*/
+
 int main(int argc, char** argv)
 {
     testing::InitGoogleTest(&argc, argv);
+    testing::InitGoogleMock(&argc, argv);
     return RUN_ALL_TESTS();
 }
 

@@ -37,8 +37,6 @@ public:
     Date GetDate() const;
     int GetCategoryID() const;
 
-
 };
 
 #endif
-
