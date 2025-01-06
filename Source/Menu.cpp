@@ -4,13 +4,11 @@ Menu::Menu(ManagerPtr sourceManager)
     : managerPtr_(sourceManager)
 {};
 
-void Menu::displayAllTransactions() const
+void Menu::DisplayAllTransactions(std::shared_ptr<Printer> printer) const
 {
-    Printer printer;
     const auto& categories = managerPtr_->categories;
     for (const auto& transaction : managerPtr_->GetTransactions())
     {
-        printer.Print(transaction, categories);
+        printer->Print(transaction, categories);
     }
-    
 }
