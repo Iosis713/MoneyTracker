@@ -7,6 +7,7 @@
 #include "Category.hpp"
 #include "Transaction.hpp"
 #include "TransactionsManager.hpp"
+#include "Printer.hpp"
 
 using ManagerPtr = std::shared_ptr<TransactionsManager>;
 
@@ -15,7 +16,7 @@ struct Menu
     ManagerPtr managerPtr_;
 
     Menu() = default;
-    ~Menu() = default;
+    virtual ~Menu() = default;
 
     Menu(ManagerPtr sourceManagerPtr);
 

@@ -1,6 +1,6 @@
 #include "Headers/Printer.hpp"
 
-bool Printer::Print(transactionPtr transPtr, Category& categories) const
+bool Printer::Print(transactionPtr transPtr, const Category& categories) const
 {
     if (!categories.ValidateCategoryID(std::forward<int>(transPtr->GetCategoryID()))) 
         return false;

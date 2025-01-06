@@ -6,6 +6,11 @@ Menu::Menu(ManagerPtr sourceManager)
 
 void Menu::displayAllTransactions() const
 {
-
+    Printer printer;
+    const auto& categories = managerPtr_->categories;
+    for (const auto& transaction : managerPtr_->GetTransactions())
+    {
+        printer.Print(transaction, categories);
+    }
     
 }

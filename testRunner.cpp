@@ -2,10 +2,11 @@
 #include <string>
 #include <tuple>
 
-#include "Source/Category.cpp"
-#include "Source/Transaction.cpp"
-#include "Source/TransactionsManager.cpp"
-#include "Source/Printer.cpp"
+#include "Source/Headers/Category.hpp"
+#include "Source/Headers/Transaction.hpp"
+#include "Source/Headers/TransactionsManager.hpp"
+#include "Source/Headers/Printer.hpp"
+#include "Source/Headers/Menu.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
@@ -227,12 +228,19 @@ TEST_F(TransactionsManagerFixture, RemovingTransactionsToRemoveByID)
 
 /*____________________________PRINTER MOCKS____________________________*/
 
-struct PrinterFixture : public testing::TestWithParam<std::tuple<int, std::string, bool>>
+struct PrinterMock : public Printer
 {
-    Printer printer;
+    /*      returnedT funcName,                                 arguments                  ,    atributes*/
+    //bool Print(std::shared_ptr<Transaction> transType, Category& categories) const override {Printer::Print(transType, categories);}
+    MOCK_METHOD(bool, Print, (std::shared_ptr<Transaction> transType, const Category& categories), (const));
 };
 
-TEST_P(PrinterFixture, PrintingSingleTransaction)
+struct PrinterMockFixture : public testing::TestWithParam<std::tuple<int, std::string, bool>>
+{
+    PrinterMock printerMock;
+};
+
+TEST_P(PrinterMockFixture, PrintingSingleTransaction)
 {
     //GIVEN
     const auto [catID, catDesc, expectedResult] = GetParam();
@@ -242,15 +250,16 @@ TEST_P(PrinterFixture, PrintingSingleTransaction)
                                        "FuelFull",
                                        std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(3)},
                                        2);
-
+    EXPECT_CALL(printerMock, Print(transactionToPrint, categories)).WillOnce(::testing::Return(expectedResult));
+   
     //WHEN
-    bool result = printer.Print(transactionToPrint, categories);
+    bool result = printerMock.Print(transactionToPrint, categories);
 
     //THEN
     ASSERT_EQ(expectedResult, result);
 }
 
-INSTANTIATE_TEST_SUITE_P(SinglePrintingInstantion, PrinterFixture, testing::Values(
+INSTANTIATE_TEST_SUITE_P(SinglePrintingInstantion, PrinterMockFixture, testing::Values(
     std::make_tuple<int, std::string, bool>(2, "Fuel", true),
     std::make_tuple<int, std::string, bool>(3, "Rent", false)));
 

@@ -15,7 +15,7 @@ struct Printer
     Printer() = default;
     virtual ~Printer() = default;
 
-    virtual bool Print(transactionPtr transPtr, Category& categories) const;
+    bool Print(transactionPtr transPtr, const Category& categories) const;
 };
 
 #endif
