@@ -262,21 +262,21 @@ TEST_P(PrinterMockFixture, PrintingSingleTransaction)
 TEST_F(PrinterMockFixture, MenuPrinting)
 {
     //GIVEN
-    auto transMan = std::make_shared<TransactionsManager>();
-    transMan->categories.AddCategory({2, "Fuel"});
-    transMan->categories.AddCategory({3, "Rent"});
-    transMan->AddTransaction(200.f,
+    auto transactionMan = std::make_shared<TransactionsManager>();
+    transactionMan->categories.AddCategory({2, "Fuel"});
+    transactionMan->categories.AddCategory({3, "Rent"});
+    transactionMan->AddTransaction(200.f,
                                  "FuelFull",
                                  std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(3)},
                                  2);
-    transMan->AddTransaction(1500.f,
+    transactionMan->AddTransaction(1500.f,
                                  "Flat",
                                  std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(4)},
                                  3);
 
-    Menu menu(transMan);
+    Menu menu(transactionMan);
     std::shared_ptr<PrinterMock> printerMockPtr = std::make_shared<PrinterMock>();
-    EXPECT_CALL(*printerMockPtr, Print(::testing::_, transMan->categories)).Times(2);
+    EXPECT_CALL(*printerMockPtr, Print(::testing::_, transactionMan->categories)).Times(2);
     
     //WHEN
     menu.DisplayAllTransactions(printerMockPtr);

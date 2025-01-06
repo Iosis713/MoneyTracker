@@ -21,7 +21,7 @@ struct Menu
     Menu(ManagerPtr sourceManagerPtr);
 
     void DisplayAllTransactions(std::shared_ptr<Printer> printer) const;
-
+    void DisplayOptions() const;  
 };
 
 #endif

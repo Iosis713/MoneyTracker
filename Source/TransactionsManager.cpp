@@ -1,6 +1,6 @@
 #include "Headers/TransactionsManager.hpp"
 
-void TransactionsManager::AddTransaction(const float value, const std::string& description, const Date date, int categoryID)
+void TransactionsManager::AddTransaction(const float value, const std::string& description, const Date& date, int categoryID)
 {
     if (categories.ValidateCategoryID(categoryID))
         transactions_.push_back(std::make_shared<Transaction>(value, description, date, categoryID));

@@ -24,10 +24,9 @@ public:
     TransactionsManager() = default;
     ~TransactionsManager() = default;
 
-    Transactions& GetTransactions() {return this-> transactions_;}
-
-    void AddTransaction(const float value, const std::string& description, const Date date, int categoryID);
+    void AddTransaction(const float value, const std::string& description, const Date& date, int categoryID);
     Transactions FindTransactionsByDate(const Date date) const;
+    Transactions& GetTransactions() {return this-> transactions_;} 
     void RemoveTransactinons(const Transactions& transactionsToRemove);
     void RemoveTransactinons(const std::vector<int> transactionsIDToRemove);
 

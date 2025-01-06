@@ -9,6 +9,7 @@ set(SRC     ../Source/Category.cpp
             ../Source/Transaction.cpp
             ../Source/TransactionsManager.cpp
             ../Source/Printer.cpp
+            ../Source/FileManager.cpp
             ../Source/Menu.cpp)
 
 set(GMOCK_LIBRARIES /usr/lib/libgmock.a  /usr/lib/libgmock_main.a)
