@@ -3,12 +3,13 @@
 #define CATEGORY
 
 #include <algorithm>
-#include <stdexcept>
-#include <vector>
-#include <string>
 #include <iostream>
-#include <utility>
+#include <ranges>
+#include <string>
+#include <stdexcept>
 #include <type_traits>
+#include <utility>
+#include <vector>
 
 using CategoryPair = std::pair<int, std::string>;
 using VectorOfCategories = std::vector<CategoryPair>;
@@ -48,6 +49,8 @@ struct Category
                     return foundByValue == element.second;
             }), categories_.end());
     }
+
+    bool operator==(const Category& rhs) const;
 };
 
 #endif

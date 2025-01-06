@@ -18,3 +18,14 @@ float Transaction::GetValue() const {return this->value_;}
 std::string Transaction::GetDescription() const {return this->description_;};
 Date Transaction::GetDate() const {return this->date_;}
 int Transaction::GetCategoryID() const {return this->categoryID_;}
+
+bool Transaction::operator==(const Transaction& rhs) const
+{
+    bool result = true;
+    result &= value_ == rhs.GetValue();
+    result &= description_ == rhs.GetDescription();
+    result &= date_ == rhs.GetDate();
+    result &= categoryID_ == rhs.GetCategoryID();
+
+    return result;
+}

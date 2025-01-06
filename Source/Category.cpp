@@ -13,3 +13,15 @@ bool Category::ValidateCategoryID(const int categoryID) const
             });
 }
 
+bool Category::operator==(const Category& rhs) const
+{
+    bool result = std::all_of(categories_.begin(), categories_.end(), [&](const auto& el)
+        {
+            return std::any_of(rhs.categories_.begin(), rhs.categories_.end(), [&](const auto& rhsEl)
+                {
+                    return rhsEl == el;
+                });
+        });
+
+    return result;
+}

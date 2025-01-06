@@ -244,7 +244,6 @@ TEST_P(PrinterFixture, PrintingSingleTransaction)
                                        2);
 
     //WHEN
-    
     bool result = printer.Print(transactionToPrint, categories);
 
     //THEN

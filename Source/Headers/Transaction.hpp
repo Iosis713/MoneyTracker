@@ -16,7 +16,7 @@ struct IDGenerator
 class Transaction
 {
 private:
-    const int transactionID_ = 0; //need to be changed to generate unique IDs
+    const int transactionID_ = 0;
     float value_ = 0.f;
     std::string description_ = "Unknown";
     Date date_ = std::chrono::year_month_day(std::chrono::year{2000}, std::chrono::January, std::chrono::day{1});
@@ -37,6 +37,7 @@ public:
     Date GetDate() const;
     int GetCategoryID() const;
 
+    bool operator ==(const Transaction& rhs) const;
 };
 
 #endif
