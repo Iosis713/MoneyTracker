@@ -27,7 +27,16 @@ int main()
                                        2);
     
 
-    FileManager("", "TestFile").SaveToFile(transactionsManager);
+    std::cout << "Saving to file completed: ";
+    std::cout << std::boolalpha << FileManager("", "TestFile").SaveToFile(transactionsManager);
+    
+    TransactionsManager anotherTransactionsManager;
+    std::cout << '\n' << "AnotherTransaction size before loading: " << anotherTransactionsManager.GetTransactions().size() << '\n';
+
+    std::cout << "Loading from file!\n";
+    FileManager("", "TestFile").LoadFromFile(anotherTransactionsManager);
+
+    std::cout << "AnotherTransactions size after loading: " << anotherTransactionsManager.GetTransactions().size() << '\n';
 
     return 0;
 }

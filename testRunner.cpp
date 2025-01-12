@@ -7,6 +7,7 @@
 #include "Source/Headers/TransactionsManager.hpp"
 #include "Source/Headers/Printer.hpp"
 #include "Source/Headers/Menu.hpp"
+#include "Source/Headers/FileManager.hpp"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
@@ -286,7 +287,43 @@ INSTANTIATE_TEST_SUITE_P(SinglePrintingInstantion, PrinterMockFixture, testing::
     std::make_tuple<int, std::string, bool>(2, "Fuel", true),
     std::make_tuple<int, std::string, bool>(3, "Rent", false)));
 
-/*_______________________MAIN_____________________________________*/
+/*_________________________________FileManager________________________________*/
+
+struct FileManagerFixutre : public testing::TestWithParam<std::tuple<std::string, bool>>
+{
+    TransactionsManager transactionsManagerToLoad;
+    TransactionsManager transactionsManagerToSave;
+
+    void SetUp() override;
+};
+
+TEST_P(FileManagerFixutre, LoadingAndSavingFile)
+{
+    //GIVEN
+    const auto& [expectedFilename, expectedStatus] = GetParam();
+
+    //WHEN
+    bool resultLoading = false;
+    try
+    {
+        resultLoading= FileManager("", expectedFilename).LoadFromFile(transactionsManagerToLoad);
+    }
+    catch(std::runtime_error& error)
+    {
+        std::cerr << "Error catched: " << error.what() << '\n';
+    }
+    resultLoading &= 1 == transactionsManagerToLoad.GetTransactions().size();
+
+    //THEN
+    ASSERT_EQ(expectedStatus, resultLoading);
+    std::remove("TestFileUT.txt");
+}
+
+INSTANTIATE_TEST_SUITE_P(LoadingSavingInstation, FileManagerFixutre, testing::Values(
+    std::make_tuple<std::string, bool>("TestFileUT", true),
+    std::make_tuple<std::string, bool>("SomeInvalidName", false)));
+
+/*_______________________________________MAIN_____________________________________*/
 
 int main(int argc, char** argv)
 {
@@ -322,3 +359,19 @@ void TransactionsManagerFixture::SetUp()
                                        std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(4)},
                                        3);
 };
+
+
+
+
+void FileManagerFixutre::SetUp()
+{
+    Category categories;
+    categories.AddCategory({2, "Fuel"});
+    transactionsManagerToSave.categories.AddCategory({2, "Fuel"});
+    transactionsManagerToSave.AddTransaction(200.f,
+                                       "FuelFull",
+                                       std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(3)},
+                                       2);
+
+    FileManager("", "TestFileUT").SaveToFile(transactionsManagerToSave);
+}

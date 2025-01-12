@@ -15,9 +15,15 @@ struct FileManager
     
     FileManager() = default;
     FileManager(const std::string& filepath, const std::string& filename);
+    FileManager(const std::string& filename);
     ~FileManager() = default;
 
+    bool LoadFromFile(TransactionsManager& transactionsManager);
     bool SaveToFile(TransactionsManager& transactionsManager) const;
+
+private:
+    std::string GetFullPathAndName() const;
+
 };
 
 #endif
