@@ -23,7 +23,6 @@ struct FileManager
 
 private:
     std::string GetFullPathAndName() const;
-
 };
 
 #endif

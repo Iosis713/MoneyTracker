@@ -101,6 +101,21 @@ Date Menu::FindTransactionsByDateUI() const
         return Date{std::chrono::year{year}, std::chrono::month{month}, std::chrono::day{day}};
 }
 
+FileManager Menu::SaveToFileUI() const
+{
+    std::string filepath = "";
+    std::string filename = "";
+    std::string filepathBuffer = "";
+    std::cout << "Provide filepath (enter 'q' or 'Q' if you want current filepath): \n" << std::flush;
+    std::cin >> filepathBuffer;
+    if ("q" != filepathBuffer and "Q" != filepathBuffer)
+        filepath = filepathBuffer;
+    std::cout << "Provide filename (without extension!): \n" << std::flush;
+    std::cin >> filename;
+
+    return FileManager(filepath, filename);
+}
+
 bool Menu::SelectOption() const
 {
     int currentOption;
@@ -131,6 +146,7 @@ bool Menu::SelectOption() const
     }
     case SAVE_TRANSACTION_TO_FILE:
     {
+        SaveToFileUI().SaveToFile(*managerPtr_);
         break;
     }
     case LOAD_TRANSACTION_FROM_FILE:

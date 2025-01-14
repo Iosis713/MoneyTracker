@@ -8,6 +8,7 @@
 #include "Transaction.hpp"
 #include "TransactionsManager.hpp"
 #include "Printer.hpp"
+#include "FileManager.hpp"
 
 using ManagerPtr = std::shared_ptr<TransactionsManager>;
 
@@ -40,6 +41,7 @@ struct Menu
 private:
     void AddTransactionUI() const;
     Date FindTransactionsByDateUI() const;
+    FileManager SaveToFileUI() const;
 };
 
 #endif
