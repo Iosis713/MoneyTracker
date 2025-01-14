@@ -3,6 +3,7 @@
 #include "Source/Headers/TransactionsManager.hpp"
 #include "Source/Headers/Printer.hpp"
 #include "Source/Headers/FileManager.hpp"
+#include "Source/Headers/Menu.hpp"
 #include <chrono>
 #include <type_traits>
 #include <string>
@@ -10,7 +11,7 @@
 
 int main()
 {
-    Category categories;
+    /*Category categories;
     categories.AddCategory({2, "Fuel"});
     auto transactionToPrint = std::make_shared<Transaction>(200.f,
                                        "FuelFull",
@@ -37,6 +38,14 @@ int main()
     FileManager("", "TestFile").LoadFromFile(anotherTransactionsManager);
 
     std::cout << "AnotherTransactions size after loading: " << anotherTransactionsManager.GetTransactions().size() << '\n';
+    */
+
+    auto menu = std::make_unique<Menu>();
+    do
+    {
+        menu->Clear();
+        menu->DisplayOptions();
+    }while(menu->SelectOption());
 
     return 0;
 }
