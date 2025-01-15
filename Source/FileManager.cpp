@@ -28,9 +28,8 @@ bool FileManager::LoadFromFile(TransactionsManager& transactionsManager)
         std::string buffer;
         
         
-        while(getline(file, buffer, ';')/*!file.eof()*/)
+        while(getline(file, buffer, ';'))
         {
-            //getline(file, buffer, ';');
             value = std::stof(buffer);
             getline(file, buffer, ';');
             description = buffer;
@@ -45,7 +44,7 @@ bool FileManager::LoadFromFile(TransactionsManager& transactionsManager)
             categoryID = std::stoi(buffer);
             getline(file, buffer, '\n');
             categoryName = buffer;
-            /*if category not found -- add*/
+            //if category not found -- add
             const auto& availableCategories = transactionsManager.categories.categories_;
             if (std::none_of(availableCategories.begin(), availableCategories.end(), 
                     [&](const auto& element)

@@ -2,6 +2,7 @@
 #ifndef MENU
 #define MENU
 
+#include <algorithm>
 #include <iostream>
 
 #include "Category.hpp"
@@ -41,7 +42,8 @@ struct Menu
 private:
     void AddTransactionUI() const;
     Date FindTransactionsByDateUI() const;
-    FileManager SaveToFileUI() const;
+    FileManager FileManagerUI() const;
+    void PrintTransaction(const std::shared_ptr<Transaction>&) const;
 };
 
 #endif

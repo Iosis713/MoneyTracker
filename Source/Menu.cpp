@@ -12,7 +12,7 @@ void Menu::AddTransactionUI() const
 {
     /*Perhaps it could be modified to use also in FileManager*/
     float value = 0;
-    std::string description = "";
+    std::string description{};
     int year = 1900;
     unsigned int month = 0;
     unsigned int day = 0;
@@ -22,7 +22,7 @@ void Menu::AddTransactionUI() const
     std::cout << "\nEnter value of transaction: " << std::flush;
     std::cin >> value;
     std::cout << "\nEnter description of transaction: " << std::flush;
-    std::cin >> description;
+    std::getline(std::cin >> std::ws, description, '\n');
     std::cout << "\nEnter year of transaction: " << std::flush;
     std::cin >> year;
     std::cout << "\nEnter month (numeric) of transaction: " << std::flush;
@@ -33,7 +33,6 @@ void Menu::AddTransactionUI() const
     std::cout << "\nEnter category name of transaction: " << std::flush;
     std::cin >> categoryName;
 
-    //const auto& availableCategories = managerPtr_->categories.categories_;
     if (std::none_of(managerPtr_->categories.categories_.begin(),
                      managerPtr_->categories.categories_.end(), 
             [&](const auto& element)
@@ -101,7 +100,7 @@ Date Menu::FindTransactionsByDateUI() const
         return Date{std::chrono::year{year}, std::chrono::month{month}, std::chrono::day{day}};
 }
 
-FileManager Menu::SaveToFileUI() const
+FileManager Menu::FileManagerUI() const
 {
     std::string filepath = "";
     std::string filename = "";
@@ -114,6 +113,16 @@ FileManager Menu::SaveToFileUI() const
     std::cin >> filename;
 
     return FileManager(filepath, filename);
+}
+
+void Menu::PrintTransaction(const std::shared_ptr<Transaction>& transaction) const
+{
+    std::cout << "ID: " << transaction->GetTransactionID() << "   ";
+    std::cout << "Value: " << transaction->GetValue() << "   ";
+    std::cout << "Description: " << transaction->GetDescription() << "   ";
+    std::cout << "Date: " << transaction->GetDate() << "   ";
+    std::cout << "Category ID: " << transaction->GetCategoryID() << "   ";
+    std::cout << "Category: " << managerPtr_->categories.SearchForCategory(transaction->GetCategoryID())->second << "   \n";
 }
 
 bool Menu::SelectOption() const
@@ -146,15 +155,22 @@ bool Menu::SelectOption() const
     }
     case SAVE_TRANSACTION_TO_FILE:
     {
-        SaveToFileUI().SaveToFile(*managerPtr_);
+        FileManagerUI().SaveToFile(*managerPtr_);
         break;
     }
     case LOAD_TRANSACTION_FROM_FILE:
     {
+        FileManagerUI().LoadFromFile(*managerPtr_);
         break;
     }
     case DISPLAY_ALL_TRANSACTIONS:
     {
+        for(const auto& transaction : managerPtr_->GetTransactions())
+            PrintTransaction(transaction);    
+
+        std::cout << "Press any key if you want to continue:\n";
+        char anyKey;
+        std::cin >> anyKey;
         break;
     }
     default:
