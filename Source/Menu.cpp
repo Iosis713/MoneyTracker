@@ -127,55 +127,70 @@ void Menu::PrintTransaction(const std::shared_ptr<Transaction>& transaction) con
 
 bool Menu::SelectOption() const
 {
-    int currentOption;
-    std::cout << "Select your option: ";
+    int currentOption = -1;
+    std::cout << "Select your option: " << std::flush;
+    //std::cin.clear();
+    //std::cin.ignore();
+
     std::cin >> currentOption;
+    if (std::cin.good())
+    {
+        using enum Options;
+        switch (static_cast<Options>(currentOption))
+        {
+        case EXIT:
+        {
+            return false;
+            break;
+        }
+        case ADD_TRANSACITON:
+        {
+            AddTransactionUI();
+            break;
+        }
+        case FIND_TRANSACTION_BY_DATE:
+        {
+            managerPtr_->FindTransactionsByDate(FindTransactionsByDateUI());
+            break;
+        }
+        case GET_TRANSACTION:
+        {
+            break;
+        }
+        case REMOVE_TRANSACTION:
+        {
+            break;
+        }
+        case SAVE_TRANSACTION_TO_FILE:
+        {
+            FileManagerUI().SaveToFile(*managerPtr_);
+            break;
+        }
+        case LOAD_TRANSACTION_FROM_FILE:
+        {
+            FileManagerUI().LoadFromFile(*managerPtr_);
+            break;
+        }
+        case DISPLAY_ALL_TRANSACTIONS:
+        {
+            for(const auto& transaction : managerPtr_->GetTransactions())
+                PrintTransaction(transaction);    
 
-    using enum Options;
-    switch (static_cast<Options>(currentOption))
-    {
-    case EXIT:
-    {
-        return false;
-        break;
+            std::cout << "Press any key if you want to continue:\n";
+            char anyKey;
+            std::cin >> anyKey;
+            break;
+        }
+        default:
+            break;
+        }
+        return true;
     }
-    case ADD_TRANSACITON:
+    else
     {
-        AddTransactionUI();
-        break;
+        std::cin.clear();
+        std::cin.ignore();
+        throw std::invalid_argument("Invalid argument. Please enter the number!");
     }
-    case FIND_TRANSACTION_BY_DATE:
-    {
-        managerPtr_->FindTransactionsByDate(FindTransactionsByDateUI());
-        break;
-    }
-    case REMOVE_TRANSACTION:
-    {
-        break;
-    }
-    case SAVE_TRANSACTION_TO_FILE:
-    {
-        FileManagerUI().SaveToFile(*managerPtr_);
-        break;
-    }
-    case LOAD_TRANSACTION_FROM_FILE:
-    {
-        FileManagerUI().LoadFromFile(*managerPtr_);
-        break;
-    }
-    case DISPLAY_ALL_TRANSACTIONS:
-    {
-        for(const auto& transaction : managerPtr_->GetTransactions())
-            PrintTransaction(transaction);    
-
-        std::cout << "Press any key if you want to continue:\n";
-        char anyKey;
-        std::cin >> anyKey;
-        break;
-    }
-    default:
-        break;
-    }
-    return true;
 
 }

@@ -4,10 +4,9 @@
 #include "Source/Headers/Printer.hpp"
 #include "Source/Headers/FileManager.hpp"
 #include "Source/Headers/Menu.hpp"
-#include <chrono>
-#include <type_traits>
-#include <string>
 
+#include <chrono>
+#include <thread>
 
 int main()
 {
@@ -41,11 +40,21 @@ int main()
     */
 
     auto menu = std::make_unique<Menu>();
-    do
+    bool status = true;
+    while (status)
     {
-        menu->Clear();
-        menu->DisplayOptions();
-    }while(menu->SelectOption());
+        try
+        {
+            menu->Clear();
+            menu->DisplayOptions();
+            status = menu->SelectOption();
+        }
+        catch(std::invalid_argument& ex)
+        {
+            std::cerr << ex.what() << '\n';
+            std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+        }
+    }
 
     return 0;
 }

@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <type_traits>
 
 #include "Category.hpp"
 #include "Transaction.hpp"
