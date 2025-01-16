@@ -185,6 +185,14 @@ TEST_F(TransactionsManagerFixture, TransactionsManagerFindByDate)
     ASSERT_EQ(transactionsManager.GetTransactions().at(2)->GetTransactionID(), result.at(0)->GetTransactionID());
 }
 
+TEST_F(TransactionsManagerFixture, TransactionsManagerFindByDateRvalue)
+{
+    //GIVEN
+    const auto result = transactionsManager.FindTransactionsByDate({std::chrono::year(2020), std::chrono::May, std::chrono::day(2)});
+
+    ASSERT_EQ(transactionsManager.GetTransactions().at(2)->GetTransactionID(), result.at(0)->GetTransactionID());
+}
+
 TEST_F(TransactionsManagerFixture, RemovingByTransactions)
 {
     //GIVEN
@@ -227,12 +235,37 @@ TEST_F(TransactionsManagerFixture, RemovingTransactionsToRemoveByID)
     ASSERT_EQ(2, transactionsManager.GetTransactions().size());
 }
 
+TEST_F(TransactionsManagerFixture, GetBalance)
+{
+    //WHEN
+    float balance = transactionsManager.GetBalance();
+
+    //THEN
+    ASSERT_EQ(1835.0f, balance);
+}
+
+TEST_F(TransactionsManagerFixture, FindTransactionsByValueLowerOrEqualThan)
+{
+    //WHEN
+    const auto transactions = transactionsManager.FindTransactionsByValueLowerOrEqualThan(100.f);
+
+    //THEN
+    ASSERT_EQ(2, transactions.size());
+}
+
+TEST_F(TransactionsManagerFixture, FindTransactionsByValueGreaterOrEqualThan)
+{
+    //WHEN
+    const auto transactions = transactionsManager.FindTransactionsByValueGreaterOrEqualThan(100.f);
+
+    //THEN
+    ASSERT_EQ(3, transactions.size());
+}
+
 /*____________________________PRINTER MOCKS____________________________*/
 
 struct PrinterMock : public Printer
 {
-    /*      returnedT funcName,                                 arguments                  ,    atributes*/
-    //bool Print(std::shared_ptr<Transaction> transType, Category& categories) const override {Printer::Print(transType, categories);}
     MOCK_METHOD(bool, Print, (std::shared_ptr<Transaction> transType, const Category& categories), (const, override));
 };
 
@@ -359,9 +392,6 @@ void TransactionsManagerFixture::SetUp()
                                        std::chrono::year_month_day{std::chrono::year(2020), std::chrono::May, std::chrono::day(4)},
                                        3);
 };
-
-
-
 
 void FileManagerFixutre::SetUp()
 {

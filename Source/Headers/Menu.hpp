@@ -3,8 +3,10 @@
 #define MENU
 
 #include <algorithm>
+#include <chrono>
 #include <iostream>
 #include <type_traits>
+#include <thread>
 
 #include "Category.hpp"
 #include "Transaction.hpp"
@@ -13,6 +15,17 @@
 #include "FileManager.hpp"
 
 using ManagerPtr = std::shared_ptr<TransactionsManager>;
+
+/*
+TO DO:
+Find by value lessThan/greaterThan - 
+Options for found transaction - 
+    - GetBalance
+    - Update
+    - Remove
+RemoveUI - 
+
+*/
 
 enum class Options : int
 {

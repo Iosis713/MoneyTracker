@@ -87,16 +87,17 @@ void Menu::DisplayOptions() const
 Date Menu::FindTransactionsByDateUI() const
 {
     int year = 0;
-        unsigned int month = 0;
-        unsigned int day = 0;
-        std::cout << "Provide a date in numeric YYYY/MM/DD format\n";
-        std::cout << "Enter the year: \n";
-        std::cin >> year;
-        std::cout << "\nEnter the month: \n";
-        std::cin >> month;
-        std::cout << "\nEnter the day: \n";
-        std::cin >> day;
-        return Date{std::chrono::year{year}, std::chrono::month{month}, std::chrono::day{day}};
+    unsigned int month = 0;
+    unsigned int day = 0;
+    std::cout << "Provide a date in numeric YYYY/MM/DD format\n" << std::flush;
+    std::cout << "Enter the year: \n" << std::flush;
+    std::cin >> year;
+    std::cout << "\nEnter the month: \n" << std::flush;
+    std::cin >> month;
+    std::cout << "\nEnter the day: \n" << std::flush;
+    std::cin >> day;
+
+    return Date{std::chrono::year{year}, std::chrono::month{month}, std::chrono::day{day}};
 }
 
 FileManager Menu::FileManagerUI() const
@@ -147,7 +148,25 @@ bool Menu::SelectOption() const
         }
         case FIND_TRANSACTION_BY_DATE:
         {
-            managerPtr_->FindTransactionsByDate(FindTransactionsByDateUI());
+            auto foundTransactions = managerPtr_->FindTransactionsByDate(FindTransactionsByDateUI());
+            if (foundTransactions.empty())
+            {
+                std::cout << "No transactions found!\n" << std::flush;
+                std::cout << "Press any key to continue\n" << std::flush;
+                char key;
+                std::cin >> key;
+            }
+            else
+            {
+                std::cout << "Press 'n' to update first transaction\n" << std::flush;
+                char key;
+                std::cin >> key;
+                if(std::cin.good() && (key == 'n' or key == 'N'))
+                {
+                    foundTransactions.at(0)->UpdateValue(1234);
+                }
+
+            }
             break;
         }
         case REMOVE_TRANSACTION:

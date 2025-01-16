@@ -8,7 +8,7 @@ void TransactionsManager::AddTransaction(const float value, const std::string& d
         throw std::runtime_error("Invalid category. Please check availbe categories or add new one!");
 }
 
-Transactions TransactionsManager::FindTransactionsByDate(const Date date) const
+Transactions TransactionsManager::FindTransactionsByDate(const Date& date) const
 {
     Transactions transactions{};
     std::ranges::for_each(transactions_, [&](const auto& transaction)
@@ -18,6 +18,40 @@ Transactions TransactionsManager::FindTransactionsByDate(const Date date) const
         });
 
     return transactions;
+}
+
+Transactions TransactionsManager::FindTransactionsByValueLowerOrEqualThan(const float value) const
+{
+    Transactions transactions{};
+    std::ranges::for_each(transactions_, [&](const auto& transaction)
+        {
+            if (transaction->GetValue() <= value)
+                transactions.push_back(transaction);
+        });
+
+    return transactions;
+}
+
+Transactions TransactionsManager::FindTransactionsByValueGreaterOrEqualThan(const float value) const
+{
+    Transactions transactions{};
+    std::ranges::for_each(transactions_, [&](const auto& transaction)
+        {
+            if (transaction->GetValue() >= value)
+                transactions.push_back(transaction);
+        });
+
+    return transactions;
+}
+
+float TransactionsManager::GetBalance() const
+{
+    float balance = 0;
+    std::ranges::for_each(transactions_, [&](const auto& transaction)
+        {
+            balance += transaction->GetValue();
+        });
+    return balance;
 }
 
 void TransactionsManager::RemoveTransactinons(const Transactions& transactionsToRemove)
