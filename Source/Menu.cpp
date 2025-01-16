@@ -78,11 +78,10 @@ void Menu::DisplayOptions() const
     std::cout << "0. EXIT\n";
     std::cout << "1. Add transaction\n";
     std::cout << "2. Find transactions By Date\n";
-    std::cout << "3. Get transactions\n";
-    std::cout << "4. Remove transactions\n";
-    std::cout << "5. Save transactions to file\n";
-    std::cout << "6. Load transactions from file\n";
-    std::cout << "7. Display all transactions\n";
+    std::cout << "3. Remove transactions\n";
+    std::cout << "4. Save transactions to file\n";
+    std::cout << "5. Load transactions from file\n";
+    std::cout << "6. Display all transactions\n";
 }
 
 Date Menu::FindTransactionsByDateUI() const
@@ -129,8 +128,6 @@ bool Menu::SelectOption() const
 {
     int currentOption = -1;
     std::cout << "Select your option: " << std::flush;
-    //std::cin.clear();
-    //std::cin.ignore();
 
     std::cin >> currentOption;
     if (std::cin.good())
@@ -151,10 +148,6 @@ bool Menu::SelectOption() const
         case FIND_TRANSACTION_BY_DATE:
         {
             managerPtr_->FindTransactionsByDate(FindTransactionsByDateUI());
-            break;
-        }
-        case GET_TRANSACTION:
-        {
             break;
         }
         case REMOVE_TRANSACTION:
