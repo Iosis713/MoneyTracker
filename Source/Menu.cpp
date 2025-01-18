@@ -127,82 +127,113 @@ void Menu::PrintTransaction(const std::shared_ptr<Transaction>& transaction) con
 
 bool Menu::SelectOption() const
 {
-    int currentOption = -1;
+    
     std::cout << "Select your option: " << std::flush;
-
-    std::cin >> currentOption;
-    if (std::cin.good())
+    int currentOption = OptionSelectionUI();
+    using enum Options;
+    switch (static_cast<Options>(currentOption))
     {
-        using enum Options;
-        switch (static_cast<Options>(currentOption))
+    case EXIT:
+    {
+        return false;
+        break;
+    }
+    case ADD_TRANSACITON:
+    {
+        AddTransactionUI();
+        break;
+    }
+    case FIND_TRANSACTION:
+    {
+        /*
+        Currently only by date. UI for finding by Category and Value will be added
+        Extraction to function required
+        DATE validation
+        */
+        std::cout << "Finding transaction by:\n" << std::flush;
+        std::cout << "1. Value      2. Date (YYYY/MM/DD)        3. Transaction Category" << std::flush;
+
+        
+        std::cout << "Select your option: " << std::flush;
+        int selectedOption = OptionSelectionUI();
+
+        Transactions foundTransactions{};
+        using enum OptionsForTransactionsFinding;
+        if(static_cast<int>(VALUE) == selectedOption)
         {
-        case EXIT:
-        {
-            return false;
-            break;
+            
         }
-        case ADD_TRANSACITON:
+        else if(static_cast<int>(DATE) == selectedOption)
         {
-            AddTransactionUI();
-            break;
+            foundTransactions = managerPtr_->FindTransactionsByDate(FindTransactionsByDateUI());
         }
-        case FIND_TRANSACTION_BY_DATE:
+        else if(static_cast<int>(TRANSACTION_CATEGORY) == selectedOption)
         {
-            auto foundTransactions = managerPtr_->FindTransactionsByDate(FindTransactionsByDateUI());
-            if (foundTransactions.empty())
+            //foundTransactions = managerPtr_->FindTransactionsByCategory();
+        }
+
+        if (foundTransactions.empty())
             {
                 std::cout << "No transactions found!\n" << std::flush;
                 std::cout << "Press any key to continue\n" << std::flush;
                 char key;
                 std::cin >> key;
             }
-            else
+        else
+        {
+            /*TO BE UPDATE TO SELECT OPTIONS Update/remove*/
+            std::cout << "Press 'n' to update first transaction\n" << std::flush;
+            char key;
+            std::cin >> key;
+            if(std::cin.good() && (key == 'n' or key == 'N'))
             {
-                std::cout << "Press 'n' to update first transaction\n" << std::flush;
-                char key;
-                std::cin >> key;
-                if(std::cin.good() && (key == 'n' or key == 'N'))
-                {
-                    foundTransactions.at(0)->UpdateValue(1234);
-                }
-
+                foundTransactions.at(0)->UpdateValue(1234);
             }
-            break;
         }
-        case REMOVE_TRANSACTION:
-        {
-            break;
-        }
-        case SAVE_TRANSACTION_TO_FILE:
-        {
-            FileManagerUI().SaveToFile(*managerPtr_);
-            break;
-        }
-        case LOAD_TRANSACTION_FROM_FILE:
-        {
-            FileManagerUI().LoadFromFile(*managerPtr_);
-            break;
-        }
-        case DISPLAY_ALL_TRANSACTIONS:
-        {
-            for(const auto& transaction : managerPtr_->GetTransactions())
-                PrintTransaction(transaction);    
-
-            std::cout << "Press any key if you want to continue:\n";
-            char anyKey;
-            std::cin >> anyKey;
-            break;
-        }
-        default:
-            break;
-        }
-        return true;
+        std::this_thread::sleep_for(std::chrono::microseconds(1000));
+        break;
+    }            
+        
+    case REMOVE_TRANSACTION:
+    {
+        break;
     }
-    else
+    case SAVE_TRANSACTION_TO_FILE:
+    {
+        FileManagerUI().SaveToFile(*managerPtr_);
+        break;
+    }
+    case LOAD_TRANSACTION_FROM_FILE:
+    {
+        FileManagerUI().LoadFromFile(*managerPtr_);
+        break;
+    }
+    case DISPLAY_ALL_TRANSACTIONS:
+    {
+        for(const auto& transaction : managerPtr_->GetTransactions())
+            PrintTransaction(transaction);    
+
+        std::cout << "Press any key if you want to continue:\n";
+        char anyKey;
+        std::cin >> anyKey;
+        break;
+    }
+    default:
+        break;
+    }
+    return true;
+}
+
+
+int Menu::OptionSelectionUI() const
+{
+    int selectedOption = -1;
+    std::cin >> selectedOption;
+    if (!std::cin.good())
     {
         std::cin.clear();
         std::cin.ignore();
         throw std::invalid_argument("Invalid argument. Please enter the number!");
     }
-
+    return selectedOption;
 }
