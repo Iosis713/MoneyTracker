@@ -244,6 +244,8 @@ TEST_F(TransactionsManagerFixture, GetBalance)
     ASSERT_EQ(1835.0f, balance);
 }
 
+/*___________________________CAN BE REFACTORED TO TEST_P*/
+
 TEST_F(TransactionsManagerFixture, FindTransactionsByValueLowerOrEqualThan)
 {
     //WHEN
@@ -260,6 +262,38 @@ TEST_F(TransactionsManagerFixture, FindTransactionsByValueGreaterOrEqualThan)
 
     //THEN
     ASSERT_EQ(3, transactions.size());
+}
+
+TEST_F(TransactionsManagerFixture, FindTransactionsByCategory_NameRvalueAndLvalue)
+{
+    //GIVEN
+    std::string lValueToFind = "Fuel";
+
+    //WHEN
+    const auto transactions = transactionsManager.FindTransactionsByCategory(std::forward<std::string>("Fuel"));
+    const auto secondTransactions = transactionsManager.FindTransactionsByCategory(lValueToFind);
+
+    //THEN
+    ASSERT_EQ(1, transactions.size());
+    ASSERT_EQ(1, secondTransactions.size());
+}
+
+TEST_F(TransactionsManagerFixture, FindTransactionsByCategory_ID)
+{
+    //WHEN
+    const auto transactions = transactionsManager.FindTransactionsByCategory(2);
+
+    //THEN
+    ASSERT_EQ(1, transactions.size());
+}
+
+TEST_F(TransactionsManagerFixture, FindTransactionsByCategory_False)
+{
+    //WHEN
+    const auto transactions = transactionsManager.FindTransactionsByCategory(120);
+
+    //THEN
+    ASSERT_EQ(0, transactions.size());
 }
 
 /*____________________________PRINTER MOCKS____________________________*/

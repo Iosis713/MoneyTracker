@@ -9,6 +9,7 @@
 #include <memory>
 #include <ranges>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 using Transactions = std::vector<std::shared_ptr<Transaction>>;
@@ -38,13 +39,17 @@ public:
 
 
     template <typename CategoryIDorName>
-    Transactions FindTransactionsByCategory(const CategoryIDorName& categoryIDorName) const
+    Transactions FindTransactionsByCategory(CategoryIDorName&& categoryIDorName) const
     {
         Transactions transactions{};
+        const auto foundCategoryIterator = categories.SearchForCategory(std::forward<std::remove_cvref_t<CategoryIDorName>>(categoryIDorName));
         std::ranges::for_each(transactions_, [&](const auto& transaction)
             {
-                if (categories.categories_.end() != categories.SearchForCategory(std::forward<>(categoryIDorName)))
+                if (categories.categories_.end() != foundCategoryIterator and
+                    foundCategoryIterator->first == transaction->GetCategoryID())
+                {
                     transactions.push_back(transaction);
+                }    
             });
 
         return transactions;
