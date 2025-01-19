@@ -72,11 +72,6 @@ private:
     FileManager FileManagerUI() const;
     void PrintTransaction(const std::shared_ptr<Transaction>&) const;
 
-
-
-    
-    //using IsTrivialType = std::enable_if_t<std::is_trivial_v<Type>>;
-
     template<IsTrivialType Type>
     Type OptionSelectionUI() const
     {

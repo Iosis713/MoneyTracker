@@ -117,17 +117,16 @@ FileManager Menu::FileManagerUI() const
 
 void Menu::PrintTransaction(const std::shared_ptr<Transaction>& transaction) const
 {
-    std::cout << "ID: " << transaction->GetTransactionID() << "   ";
-    std::cout << "Value: " << transaction->GetValue() << "   ";
-    std::cout << "Description: " << transaction->GetDescription() << "   ";
-    std::cout << "Date: " << transaction->GetDate() << "   ";
-    std::cout << "Category ID: " << transaction->GetCategoryID() << "   ";
-    std::cout << "Category: " << managerPtr_->categories.SearchForCategory(transaction->GetCategoryID())->second << "   \n";
+    std::cout << std::format("ID: {}   Date: {}   CategoryID: {}   CategoryName: {}   Description: {}\n",
+                            transaction->GetTransactionID(),
+                            transaction->GetDate(),
+                            transaction->GetCategoryID(),
+                            managerPtr_->categories.SearchForCategory(transaction->GetCategoryID())->second,
+                            transaction->GetDescription());
 }
 
 bool Menu::SelectOption() const
 {
-    
     std::cout << "Select your option: " << std::flush;
     int currentOption = OptionSelectionUI<int>();
     using enum Options;
@@ -161,7 +160,6 @@ bool Menu::SelectOption() const
         {
             std::cout << "Please provide bottom value of the range: " << std::flush;
             float bottomValue = OptionSelectionUI<float>();
-
             std::cout << "\nPlease provide upper value of the range: " << std::flush;
             float upperValue = OptionSelectionUI<float>();
             foundTransactions = managerPtr_->FindTransactionsByValueInRange(bottomValue, upperValue);
@@ -174,9 +172,7 @@ bool Menu::SelectOption() const
         {
             std::cout << "Available categories: \n";
             for (const auto& category : managerPtr_->categories.categories_)
-            {
-                std::cout << "CategoryID: " << category.first << "   CategoryName: " << category.second << '\n';
-            }
+                std::cout << std::format("CategoryID: {}   CategoryName: {}\n", category.first, category.second);
 
             std::cout << "11. Select by category ID     12.Select by category name\n" << std::flush;
             int findCategoryBy = OptionSelectionUI<int>();
