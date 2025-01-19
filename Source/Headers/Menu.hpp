@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <concepts>
 #include <iostream>
 #include <type_traits>
 #include <thread>
@@ -15,6 +16,9 @@
 #include "FileManager.hpp"
 
 using ManagerPtr = std::shared_ptr<TransactionsManager>;
+
+template<class T>
+concept IsTrivialType = std::is_trivial_v<T>;
 
 /*
 TO DO:
@@ -45,7 +49,7 @@ enum class OptionsForTransactionsFinding : int
     TRANSACTION_CATEGORY = 3,
 
     CATEGORY_ID = 11,
-    CATEGORY_NAME = 12
+    CATEGORY_NAME = 12,
 };
 
 struct Menu
@@ -67,7 +71,25 @@ private:
     Date FindTransactionsByDateUI() const;
     FileManager FileManagerUI() const;
     void PrintTransaction(const std::shared_ptr<Transaction>&) const;
-    int OptionSelectionUI() const;
+
+
+
+    
+    //using IsTrivialType = std::enable_if_t<std::is_trivial_v<Type>>;
+
+    template<IsTrivialType Type>
+    Type OptionSelectionUI() const
+    {
+        Type selectedOption;
+        std::cin >> selectedOption;
+        if (!std::cin.good())
+        {
+            std::cin.clear();
+            std::cin.ignore();
+            throw std::invalid_argument("Invalid argument. Please enter the number!");
+        }
+        return selectedOption;
+    }
 };
 
 #endif

@@ -27,8 +27,7 @@ public:
 
     void AddTransaction(const float value, const std::string& description, const Date& date, int categoryID);
     Transactions FindTransactionsByDate(const Date& date) const;
-    Transactions FindTransactionsByValueLowerOrEqualThan(const float value) const;
-    Transactions FindTransactionsByValueGreaterOrEqualThan(const float value) const;
+    Transactions FindTransactionsByValueInRange(const float bottom, const float upper) const;
     float GetBalance() const;  
     Transactions& GetTransactions() {return this-> transactions_;} 
     void RemoveTransactinons(const Transactions& transactionsToRemove);

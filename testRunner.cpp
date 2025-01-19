@@ -246,19 +246,10 @@ TEST_F(TransactionsManagerFixture, GetBalance)
 
 /*___________________________CAN BE REFACTORED TO TEST_P*/
 
-TEST_F(TransactionsManagerFixture, FindTransactionsByValueLowerOrEqualThan)
+TEST_F(TransactionsManagerFixture, FindTransactionsByValueInRange)
 {
     //WHEN
-    const auto transactions = transactionsManager.FindTransactionsByValueLowerOrEqualThan(100.f);
-
-    //THEN
-    ASSERT_EQ(2, transactions.size());
-}
-
-TEST_F(TransactionsManagerFixture, FindTransactionsByValueGreaterOrEqualThan)
-{
-    //WHEN
-    const auto transactions = transactionsManager.FindTransactionsByValueGreaterOrEqualThan(100.f);
+    const auto transactions = transactionsManager.FindTransactionsByValueInRange(100.f, 5000.f);
 
     //THEN
     ASSERT_EQ(3, transactions.size());

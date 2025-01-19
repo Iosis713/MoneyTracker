@@ -77,7 +77,7 @@ void Menu::DisplayOptions() const
 {
     std::cout << "0. EXIT\n";
     std::cout << "1. Add transaction\n";
-    std::cout << "2. Find transactions By Date\n";
+    std::cout << "2. Find transactions\n";
     std::cout << "3. Remove transactions\n";
     std::cout << "4. Save transactions to file\n";
     std::cout << "5. Load transactions from file\n";
@@ -129,7 +129,7 @@ bool Menu::SelectOption() const
 {
     
     std::cout << "Select your option: " << std::flush;
-    int currentOption = OptionSelectionUI();
+    int currentOption = OptionSelectionUI<int>();
     using enum Options;
     switch (static_cast<Options>(currentOption))
     {
@@ -151,17 +151,20 @@ bool Menu::SelectOption() const
         DATE validation
         */
         std::cout << "Finding transaction by:\n" << std::flush;
-        std::cout << "1. Value      2. Date (YYYY/MM/DD)        3. Transaction Category" << std::flush;
-
-        
+        std::cout << "1. Value      2. Date (YYYY/MM/DD)        3. Transaction Category\n" << std::flush;        
         std::cout << "Select your option: " << std::flush;
-        int selectedOption = OptionSelectionUI();
+        int selectedOption = OptionSelectionUI<int>();
 
         Transactions foundTransactions{};
         using enum OptionsForTransactionsFinding;
         if(static_cast<int>(VALUE) == selectedOption)
         {
-            
+            std::cout << "Please provide bottom value of the range: " << std::flush;
+            float bottomValue = OptionSelectionUI<float>();
+
+            std::cout << "\nPlease provide upper value of the range: " << std::flush;
+            float upperValue = OptionSelectionUI<float>();
+            foundTransactions = managerPtr_->FindTransactionsByValueInRange(bottomValue, upperValue);
         }
         else if(static_cast<int>(DATE) == selectedOption)
         {
@@ -169,7 +172,27 @@ bool Menu::SelectOption() const
         }
         else if(static_cast<int>(TRANSACTION_CATEGORY) == selectedOption)
         {
-            //foundTransactions = managerPtr_->FindTransactionsByCategory();
+            std::cout << "Available categories: \n";
+            for (const auto& category : managerPtr_->categories.categories_)
+            {
+                std::cout << "CategoryID: " << category.first << "   CategoryName: " << category.second << '\n';
+            }
+
+            std::cout << "11. Select by category ID     12.Select by category name\n" << std::flush;
+            int findCategoryBy = OptionSelectionUI<int>();
+            if(static_cast<int>(CATEGORY_ID) == findCategoryBy)
+            {
+                std::cout << "Select categoryID: " << std::flush;
+                int categoryIDToFind = OptionSelectionUI<int>();
+                foundTransactions = managerPtr_->FindTransactionsByCategory(categoryIDToFind);
+            }
+            else if(static_cast<int>(CATEGORY_NAME) == findCategoryBy)
+            {
+                std::cout << "Select Category name: " << std::flush;
+                std::string categoryNameToFind {};
+                std::cin >> categoryNameToFind;
+                foundTransactions = managerPtr_->FindTransactionsByCategory(categoryNameToFind);
+            }            
         }
 
         if (foundTransactions.empty())
@@ -181,6 +204,11 @@ bool Menu::SelectOption() const
             }
         else
         {
+            Clear();
+            std::cout << "Transactions found:\n" << std::flush;
+            for(const auto& transaction : foundTransactions)
+                PrintTransaction(transaction);  
+
             /*TO BE UPDATE TO SELECT OPTIONS Update/remove*/
             std::cout << "Press 'n' to update first transaction\n" << std::flush;
             char key;
@@ -222,18 +250,4 @@ bool Menu::SelectOption() const
         break;
     }
     return true;
-}
-
-
-int Menu::OptionSelectionUI() const
-{
-    int selectedOption = -1;
-    std::cin >> selectedOption;
-    if (!std::cin.good())
-    {
-        std::cin.clear();
-        std::cin.ignore();
-        throw std::invalid_argument("Invalid argument. Please enter the number!");
-    }
-    return selectedOption;
 }

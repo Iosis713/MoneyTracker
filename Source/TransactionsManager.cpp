@@ -20,24 +20,12 @@ Transactions TransactionsManager::FindTransactionsByDate(const Date& date) const
     return transactions;
 }
 
-Transactions TransactionsManager::FindTransactionsByValueLowerOrEqualThan(const float value) const
+Transactions TransactionsManager::FindTransactionsByValueInRange(const float bottom, const float upper) const
 {
     Transactions transactions{};
     std::ranges::for_each(transactions_, [&](const auto& transaction)
         {
-            if (transaction->GetValue() <= value)
-                transactions.push_back(transaction);
-        });
-
-    return transactions;
-}
-
-Transactions TransactionsManager::FindTransactionsByValueGreaterOrEqualThan(const float value) const
-{
-    Transactions transactions{};
-    std::ranges::for_each(transactions_, [&](const auto& transaction)
-        {
-            if (transaction->GetValue() >= value)
+            if (transaction->GetValue() >= bottom && transaction->GetValue() <= upper)
                 transactions.push_back(transaction);
         });
 
