@@ -86,17 +86,13 @@ void Menu::DisplayOptions() const
 
 Date Menu::FindTransactionsByDateUI() const
 {
-    int year = 0;
-    unsigned int month = 0;
-    unsigned int day = 0;
     std::cout << "Provide a date in numeric YYYY/MM/DD format\n" << std::flush;
     std::cout << "Enter the year: \n" << std::flush;
-    std::cin >> year;
+    const int year = OptionSelectionUI<int>();
     std::cout << "\nEnter the month: \n" << std::flush;
-    std::cin >> month;
+    const unsigned int month = OptionSelectionUI<unsigned int>();
     std::cout << "\nEnter the day: \n" << std::flush;
-    std::cin >> day;
-
+    const unsigned int day = OptionSelectionUI<unsigned int>();
     return Date{std::chrono::year{year}, std::chrono::month{month}, std::chrono::day{day}};
 }
 
@@ -117,9 +113,10 @@ FileManager Menu::FileManagerUI() const
 
 void Menu::PrintTransaction(const std::shared_ptr<Transaction>& transaction) const
 {
-    std::cout << std::format("ID: {}   Date: {}   CategoryID: {}   CategoryName: {}   Description: {}\n",
+    std::cout << std::format("ID: {}   Date: {}   Value: {}   CategoryID: {}   CategoryName: {}   Description: {}\n",
                             transaction->GetTransactionID(),
                             transaction->GetDate(),
+                            transaction->GetValue(),
                             transaction->GetCategoryID(),
                             managerPtr_->categories.SearchForCategory(transaction->GetCategoryID())->second,
                             transaction->GetDescription());
