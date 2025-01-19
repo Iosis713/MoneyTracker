@@ -84,6 +84,31 @@ void Menu::DisplayOptions() const
     std::cout << "6. Display all transactions\n";
 }
 
+void Menu::FindTransactionsByCategoryUI(Transactions& foundTransactions) const
+{
+    std::cout << "Available categories: \n";
+    for (const auto& category : managerPtr_->categories.categories_)
+        std::cout << std::format("CategoryID: {}   CategoryName: {}\n", category.first, category.second);
+
+    std::cout << "11. Select by category ID     12.Select by category name\n" << std::flush;
+    int findCategoryBy = OptionSelectionUI<int>();
+
+    using enum OptionsForTransactionsFinding;
+    if(static_cast<int>(CATEGORY_ID) == findCategoryBy)
+    {
+        std::cout << "Select categoryID: " << std::flush;
+        int categoryIDToFind = OptionSelectionUI<int>();
+        foundTransactions = managerPtr_->FindTransactionsByCategory(categoryIDToFind);
+    }
+    else if(static_cast<int>(CATEGORY_NAME) == findCategoryBy)
+    {
+        std::cout << "Select Category name: " << std::flush;
+        std::string categoryNameToFind {};
+        std::cin >> categoryNameToFind;
+        foundTransactions = managerPtr_->FindTransactionsByCategory(categoryNameToFind);
+    }
+}
+
 Date Menu::FindTransactionsByDateUI() const
 {
     std::cout << "Provide a date in numeric YYYY/MM/DD format\n" << std::flush;
@@ -167,25 +192,7 @@ bool Menu::SelectOption() const
         }
         else if(static_cast<int>(TRANSACTION_CATEGORY) == selectedOption)
         {
-            std::cout << "Available categories: \n";
-            for (const auto& category : managerPtr_->categories.categories_)
-                std::cout << std::format("CategoryID: {}   CategoryName: {}\n", category.first, category.second);
-
-            std::cout << "11. Select by category ID     12.Select by category name\n" << std::flush;
-            int findCategoryBy = OptionSelectionUI<int>();
-            if(static_cast<int>(CATEGORY_ID) == findCategoryBy)
-            {
-                std::cout << "Select categoryID: " << std::flush;
-                int categoryIDToFind = OptionSelectionUI<int>();
-                foundTransactions = managerPtr_->FindTransactionsByCategory(categoryIDToFind);
-            }
-            else if(static_cast<int>(CATEGORY_NAME) == findCategoryBy)
-            {
-                std::cout << "Select Category name: " << std::flush;
-                std::string categoryNameToFind {};
-                std::cin >> categoryNameToFind;
-                foundTransactions = managerPtr_->FindTransactionsByCategory(categoryNameToFind);
-            }            
+            FindTransactionsByCategoryUI(foundTransactions);         
         }
 
         if (foundTransactions.empty())

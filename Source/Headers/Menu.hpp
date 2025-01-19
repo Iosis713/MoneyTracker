@@ -85,6 +85,8 @@ private:
         }
         return selectedOption;
     }
+
+    void FindTransactionsByCategoryUI(Transactions& foundTransactions) const;
 };
 
 #endif
