@@ -23,15 +23,16 @@ public:
     Category categories;
 
     TransactionsManager() = default;
-    ~TransactionsManager() = default;
+   ~TransactionsManager() = default;
 
     void AddTransaction(const float value, const std::string& description, const Date& date, int categoryID);
     Transactions FindTransactionsByDate(const Date& date) const;
     Transactions FindTransactionsByValueInRange(const float bottom, const float upper) const;
-    float GetBalance() const;  
+    float GetBalance() const;
+    float GetBalance(const Transactions& transactions) const;
     Transactions& GetTransactions() {return this-> transactions_;} 
     void RemoveTransactinons(const Transactions& transactionsToRemove);
-    void RemoveTransactinons(const std::vector<int> transactionsIDToRemove);
+    void RemoveTransactinons(const std::vector<int>& transactionsIDToRemove);
 
     void SortTransactionsByCategoryName();
     void SortTransactionsByCategoryID();
@@ -53,6 +54,5 @@ public:
 
         return transactions;
     }
-      
 };
 #endif

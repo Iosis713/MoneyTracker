@@ -1,15 +1,27 @@
 #include "Headers/Printer.hpp"
 
-bool Printer::Print(transactionPtr transPtr, const Category& categories) const
+
+bool Printer::Print(const transactionPtr transaction, const Category& categories) const
 {
-    if (!categories.ValidateCategoryID(std::forward<int>(transPtr->GetCategoryID()))) 
+    if (!categories.ValidateCategoryID(std::forward<int>(transaction->GetCategoryID()))) 
         return false;
 
-    std::cout << "TransactionID: " << transPtr->GetTransactionID() << "   ";
-    std::cout << "Value: " << transPtr->GetValue() << "   ";
-    std::cout << "Date: " << transPtr->GetDate() << "   ";
-    std::cout << "Description: " << transPtr->GetDescription() << "   ";
-    const auto categoryName = categories.SearchForCategory(std::forward<int>(transPtr->GetCategoryID()))->second;
-    std::cout << "Category: " << categoryName << "   \n";
+    std::cout << std::format("ID: {}   Date: {}   Value: {}   CategoryID: {}   CategoryName: {}   Description: {}\n",
+                            transaction->GetTransactionID(),
+                            transaction->GetDate(),
+                            transaction->GetValue(),
+                            transaction->GetCategoryID(),
+                            categories.SearchForCategory(transaction->GetCategoryID())->second,
+                            transaction->GetDescription());
+    
     return true;
+}
+
+bool Printer::PrintAllSelectedTransactions(const Transactions& transactions, const Category& categories) const
+{
+    bool areAllPrinted = true;
+    for(const auto& transaction : transactions)
+        areAllPrinted &= Print(transaction, categories);
+
+    return areAllPrinted;
 }

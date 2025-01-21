@@ -20,26 +20,14 @@ using ManagerPtr = std::shared_ptr<TransactionsManager>;
 template<class T>
 concept IsTrivialType = std::is_trivial_v<T>;
 
-/*
-TO DO:
-Find by value lessThan/greaterThan - 
-Options for found transaction - 
-    - GetBalance
-    - Update
-    - Remove
-RemoveUI - 
-
-*/
-
 enum class Options : int
 {
     EXIT = 0,
-    ADD_TRANSACITON = 1,
+    ADD_TRANSACTION = 1,
     FIND_TRANSACTION = 2,
-    REMOVE_TRANSACTION = 3,
-    SAVE_TRANSACTION_TO_FILE = 4,
-    LOAD_TRANSACTION_FROM_FILE = 5,
-    DISPLAY_ALL_TRANSACTIONS = 6
+    SAVE_TRANSACTIONS_TO_FILE = 3,
+    LOAD_TRANSACTIONS_FROM_FILE = 4,
+    DISPLAY_ALL_TRANSACTIONS = 5
 };
 
 enum class OptionsForTransactionsFinding : int
@@ -50,6 +38,14 @@ enum class OptionsForTransactionsFinding : int
 
     CATEGORY_ID = 11,
     CATEGORY_NAME = 12,
+};
+
+enum class OptionsForFoundTransactions : int
+{
+    EXIT = 0,
+    UPDATE = 1,
+    REMOVE = 2,
+    GET_BALANCE = 3
 };
 
 struct Menu
@@ -63,14 +59,14 @@ struct Menu
 
     void Clear() const;
     void DisplayAllTransactions(std::shared_ptr<Printer> printer) const;
-    void DisplayOptions() const;  
+    void DisplayOptions() const;
+    void DisplayOptionsForFoundTransactions() const;
     bool SelectOption() const;
     
 private:
     void AddTransactionUI() const;
     Date FindTransactionsByDateUI() const;
     FileManager FileManagerUI() const;
-    void PrintTransaction(const std::shared_ptr<Transaction>&) const;
 
     template<IsTrivialType Type>
     Type OptionSelectionUI() const
@@ -87,6 +83,8 @@ private:
     }
 
     void FindTransactionsByCategoryUI(Transactions& foundTransactions) const;
+    bool ExecuteSelectedOptionForFoundTransactions(const int option, Transactions& foundTransactions) const;
+
 };
 
 #endif

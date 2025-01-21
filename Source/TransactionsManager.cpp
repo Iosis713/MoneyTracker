@@ -42,6 +42,16 @@ float TransactionsManager::GetBalance() const
     return balance;
 }
 
+float TransactionsManager::GetBalance(const Transactions& transactions) const
+{
+    float balance = 0;
+    std::ranges::for_each(transactions, [&](const auto& transaction)
+        {
+            balance += transaction->GetValue();
+        });
+    return balance;
+}
+
 void TransactionsManager::RemoveTransactinons(const Transactions& transactionsToRemove)
 {
     auto iterToRemove = std::remove_if(transactions_.begin(), transactions_.end(),
@@ -63,7 +73,7 @@ void TransactionsManager::RemoveTransactinons(const Transactions& transactionsTo
     transactions_.erase(iterToRemove, transactions_.end());
 }
 
-void TransactionsManager::RemoveTransactinons(const std::vector<int> transactionsIDToRemove)
+void TransactionsManager::RemoveTransactinons(const std::vector<int>& transactionsIDToRemove)
 {
     auto iterToRemove = std::remove_if(transactions_.begin(), transactions_.end(),
         [&](const auto& element)

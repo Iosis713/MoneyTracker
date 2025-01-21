@@ -75,13 +75,55 @@ void Menu::DisplayAllTransactions(std::shared_ptr<Printer> printer) const
 
 void Menu::DisplayOptions() const
 {
-    std::cout << "0. EXIT\n";
-    std::cout << "1. Add transaction\n";
-    std::cout << "2. Find transactions\n";
-    std::cout << "3. Remove transactions\n";
-    std::cout << "4. Save transactions to file\n";
-    std::cout << "5. Load transactions from file\n";
-    std::cout << "6. Display all transactions\n";
+    using enum Options;
+    std::cout << std::format("{}. EXIT\n{}. Add transaction\n{}. Find transactions\n{}. Save transactions to file\n{}. LoadTransactions from file\n{}. Display all transactions\n",
+                              static_cast<int>(EXIT),
+                              static_cast<int>(ADD_TRANSACTION),
+                              static_cast<int>(FIND_TRANSACTION),
+                              static_cast<int>(SAVE_TRANSACTIONS_TO_FILE),
+                              static_cast<int>(LOAD_TRANSACTIONS_FROM_FILE),
+                              static_cast<int>(DISPLAY_ALL_TRANSACTIONS));
+}
+
+void Menu::DisplayOptionsForFoundTransactions() const
+{
+    using enum OptionsForFoundTransactions;
+    std::cout << "Available options:\n";
+    std::cout << std::format("{}. EXIT\n{}. Update\n{}. Remove\n{}. Get Balance\n",
+                             static_cast<int>(EXIT),
+                             static_cast<int>(UPDATE),
+                             static_cast<int>(REMOVE),
+                             static_cast<int>(GET_BALANCE));
+
+    std::cout << "Select option: ";
+}
+
+bool Menu::ExecuteSelectedOptionForFoundTransactions(const int option, Transactions& foundTransactions) const
+{
+    //Need to handle with updating found transactions as well as global,
+    //but as they consist of shared ptrs it should be ok xD --TO CHECK
+    using enum OptionsForFoundTransactions;
+    if (static_cast<int>(EXIT) == option)
+    {
+        return false;
+    }
+    else if (static_cast<int>(UPDATE) == option)
+    {
+        std::cout << "UPDATE TEST - TO BE CHANGED!\n";
+        foundTransactions.at(0)->UpdateValue(123456.f);
+        return true;
+    }
+    else if (static_cast<int>(REMOVE) == option)
+    {
+        managerPtr_->RemoveTransactinons(foundTransactions);
+        return false;
+    }
+    else if (static_cast<int>(GET_BALANCE) == option)
+    {
+        managerPtr_->GetBalance(foundTransactions);
+        return true;
+    }
+    return false;
 }
 
 void Menu::FindTransactionsByCategoryUI(Transactions& foundTransactions) const
@@ -136,17 +178,6 @@ FileManager Menu::FileManagerUI() const
     return FileManager(filepath, filename);
 }
 
-void Menu::PrintTransaction(const std::shared_ptr<Transaction>& transaction) const
-{
-    std::cout << std::format("ID: {}   Date: {}   Value: {}   CategoryID: {}   CategoryName: {}   Description: {}\n",
-                            transaction->GetTransactionID(),
-                            transaction->GetDate(),
-                            transaction->GetValue(),
-                            transaction->GetCategoryID(),
-                            managerPtr_->categories.SearchForCategory(transaction->GetCategoryID())->second,
-                            transaction->GetDescription());
-}
-
 bool Menu::SelectOption() const
 {
     std::cout << "Select your option: " << std::flush;
@@ -159,7 +190,7 @@ bool Menu::SelectOption() const
         return false;
         break;
     }
-    case ADD_TRANSACITON:
+    case ADD_TRANSACTION:
     {
         AddTransactionUI();
         break;
@@ -167,9 +198,7 @@ bool Menu::SelectOption() const
     case FIND_TRANSACTION:
     {
         /*
-        Currently only by date. UI for finding by Category and Value will be added
-        Extraction to function required
-        DATE validation
+        DATE validation required
         */
         std::cout << "Finding transaction by:\n" << std::flush;
         std::cout << "1. Value      2. Date (YYYY/MM/DD)        3. Transaction Category\n" << std::flush;        
@@ -204,42 +233,35 @@ bool Menu::SelectOption() const
             }
         else
         {
-            Clear();
-            std::cout << "Transactions found:\n" << std::flush;
-            for(const auto& transaction : foundTransactions)
-                PrintTransaction(transaction);  
-
-            /*TO BE UPDATE TO SELECT OPTIONS Update/remove*/
-            std::cout << "Press 'n' to update first transaction\n" << std::flush;
-            char key;
-            std::cin >> key;
-            if(std::cin.good() && (key == 'n' or key == 'N'))
+            bool updatingStatus = true;
+            while (updatingStatus)
             {
-                foundTransactions.at(0)->UpdateValue(1234);
+                Clear();
+                std::cout << "Transactions found:\n" << std::flush;
+                Printer().PrintAllSelectedTransactions(foundTransactions, managerPtr_->categories);
+
+                DisplayOptionsForFoundTransactions();
+                selectedOption = OptionSelectionUI<int>();
+                updatingStatus = ExecuteSelectedOptionForFoundTransactions(selectedOption, foundTransactions);
             }
         }
         std::this_thread::sleep_for(std::chrono::microseconds(1000));
         break;
     }            
         
-    case REMOVE_TRANSACTION:
-    {
-        break;
-    }
-    case SAVE_TRANSACTION_TO_FILE:
+    case SAVE_TRANSACTIONS_TO_FILE:
     {
         FileManagerUI().SaveToFile(*managerPtr_);
         break;
     }
-    case LOAD_TRANSACTION_FROM_FILE:
+    case LOAD_TRANSACTIONS_FROM_FILE:
     {
         FileManagerUI().LoadFromFile(*managerPtr_);
         break;
     }
     case DISPLAY_ALL_TRANSACTIONS:
     {
-        for(const auto& transaction : managerPtr_->GetTransactions())
-            PrintTransaction(transaction);    
+        Printer().PrintAllSelectedTransactions(managerPtr_->GetTransactions(), managerPtr_->categories);
 
         std::cout << "Press any key if you want to continue:\n";
         char anyKey;
