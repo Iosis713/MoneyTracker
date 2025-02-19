@@ -30,5 +30,7 @@ for module in "${STL_MODULES[@]}"; do
         clang++ -std=c++20 -fmodules -xc++-system-header "$module" -o "$pcm_file"
     fi
 done
+cd ..
 
+echo Finished building modules
 
