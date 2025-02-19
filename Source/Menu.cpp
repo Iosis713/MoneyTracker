@@ -110,7 +110,7 @@ bool Menu::ExecuteSelectedOptionForFoundTransactions(const int option, Transacti
     else if (static_cast<int>(UPDATE) == option)
     {
         std::cout << "Select transaction ID to be updated:\n";
-        int selectedID = OptionSelectionUI<int>();
+        [[maybe_unused]]int selectedID = OptionSelectionUI<int>();
         std::cout << "Select Option:\n";
         foundTransactions.at(0)->UpdateValue(123456.f);
         return true;

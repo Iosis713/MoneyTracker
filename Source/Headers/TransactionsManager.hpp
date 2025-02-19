@@ -5,12 +5,12 @@
 #include "Transaction.hpp"
 #include "Category.hpp"
 
-#include <algorithm>
-#include <memory>
-#include <ranges>
-#include <stdexcept>
-#include <utility>
-#include <vector>
+import <algorithm>;
+import <memory>;
+import <ranges>;
+import <stdexcept>;
+import <utility>;
+import <vector>;
 
 using Transactions = std::vector<std::shared_ptr<Transaction>>;
 

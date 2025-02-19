@@ -1,6 +1,9 @@
-#include <iostream>
-#include <string>
-#include <tuple>
+import <iostream>;
+import <string>;
+import <tuple>;
+
+#include <bits/stdint-uintn.h>
+#include <stdint.h>
 
 #include "Source/Headers/Category.hpp"
 #include "Source/Headers/Transaction.hpp"

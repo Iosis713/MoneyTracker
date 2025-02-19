@@ -2,9 +2,9 @@
 #ifndef PRINTER
 #define PRINTER
 
-#include <iostream>
-#include <memory>
-#include <vector>
+import <iostream>;
+import <memory>;
+import <vector>;
 
 #include "Transaction.hpp"
 #include "Category.hpp"

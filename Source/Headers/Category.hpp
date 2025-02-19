@@ -2,14 +2,14 @@
 #ifndef CATEGORY
 #define CATEGORY
 
-#include <algorithm>
-#include <iostream>
-#include <ranges>
-#include <string>
-#include <stdexcept>
-#include <type_traits>
-#include <utility>
-#include <vector>
+import <algorithm>;
+import <iostream>;
+import <ranges>;
+import <string>;
+import <stdexcept>;
+import <type_traits>;
+import <utility>;
+import <vector>;
 
 using CategoryPair = std::pair<int, std::string>;
 using VectorOfCategories = std::vector<CategoryPair>;

@@ -2,12 +2,12 @@
 #ifndef MENU
 #define MENU
 
-#include <algorithm>
-#include <chrono>
-#include <concepts>
-#include <iostream>
-#include <type_traits>
-#include <thread>
+import <algorithm>;
+import <chrono>;
+import <concepts>;
+import <iostream>;
+import <type_traits>;
+import <thread>;
 
 #include "Category.hpp"
 #include "Transaction.hpp"
